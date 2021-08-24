@@ -1,5 +1,6 @@
 // home.dart
 import 'package:edil/model/ticket_model.dart';
+import 'package:edil/widgets/confine_input.dart';
 import 'package:flutter/material.dart';
 
 class TicketInput extends StatefulWidget {
@@ -8,13 +9,16 @@ class TicketInput extends StatefulWidget {
 }
 
 class _TicketInputState extends State<TicketInput> {
-  final int _inputSizeDivider = 6;
-  final int _inputSubstract = 34;
-  final int _inputAdder = 10;
   final double _borderRadius = 8;
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   //order to save
   Ticket ticketOrder = Ticket();
+  String ticketAllDigits;
+  String ticketFirstDigit;
+  String ticketSecondDigit;
+  String ticketThirdDigit;
+  String ticketFourthDigit;
+  String ticketFifthDigit;
   String _validateItemRequired(String value) {
     return value.isEmpty ? 'Item Required' : null;
   }
@@ -27,6 +31,11 @@ class _TicketInputState extends State<TicketInput> {
   void _submitOrder() {
     if (_formStateKey.currentState.validate()) {
       _formStateKey.currentState.save();
+      ticketAllDigits = ticketFirstDigit +
+          ticketSecondDigit +
+          ticketThirdDigit +
+          ticketFourthDigit +
+          ticketFifthDigit;
     }
   }
 
@@ -40,35 +49,7 @@ class _TicketInputState extends State<TicketInput> {
           padding: EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(_borderRadius))),
-                  //hintText: 'Espresso',
-                  labelText: 'input',
-                ),
-                //validator: (value) => _validateItemRequired(value),
-                onSaved: (value) => ticketOrder.loto_numbers[0] = value,
-                validator: _validateItemRequired,
-              ),
-              Divider(),
-              TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(_borderRadius))),
-                  //hintText: '3',
-                  labelText: 'input',
-                ),
-                //validator: (value) => _validateItemCount(value),
-                onSaved: (value) => ticketOrder.loto_numbers[1] = value,
-                validator: _validateItemRequired,
-              ),
-              Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
+              ConfineInput(
                 child: TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -78,14 +59,12 @@ class _TicketInputState extends State<TicketInput> {
                     labelText: 'input',
                   ),
                   //validator: (value) => _validateItemRequired(value),
-                  onSaved: (value) => ticketOrder.loto_numbers[2] = value,
+                  onSaved: (value) => ticketFirstDigit = value,
                   validator: _validateItemRequired,
                 ),
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
+              ConfineInput(
                 child: TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -95,14 +74,27 @@ class _TicketInputState extends State<TicketInput> {
                     labelText: 'input',
                   ),
                   //validator: (value) => _validateItemCount(value),
-                  onSaved: (value) => ticketOrder.loto_numbers[3] = value,
+                  onSaved: (value) => ticketSecondDigit = value,
                   validator: _validateItemRequired,
                 ),
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
+              ConfineInput(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(_borderRadius))),
+                    //hintText: 'Espresso',
+                    labelText: 'input',
+                  ),
+                  //validator: (value) => _validateItemRequired(value),
+                  onSaved: (value) => ticketThirdDigit = value,
+                  validator: _validateItemRequired,
+                ),
+              ),
+              Divider(),
+              ConfineInput(
                 child: TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -112,31 +104,40 @@ class _TicketInputState extends State<TicketInput> {
                     labelText: 'input',
                   ),
                   //validator: (value) => _validateItemCount(value),
-                  onSaved: (value) => ticketOrder.loto_numbers[4] = value,
+                  onSaved: (value) => ticketFourthDigit = value,
                   validator: _validateItemRequired,
                 ),
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width -
-                        _inputSubstract +
-                        _inputAdder) /
-                    _inputSizeDivider,
-                child: TextButton(
-                  child: Text('Buy'),
-                  style: TextButton.styleFrom(
-                    primary: Colors.green,
-                    backgroundColor: Colors.lightGreen.shade100,
-                    onSurface: Colors.pink,
-                    shape: const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    textStyle: TextStyle(
-                        color: Colors.red,
-                        fontSize: 30,
-                        fontStyle: FontStyle.italic),
+              ConfineInput(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(_borderRadius))),
+                    //hintText: '3',
+                    labelText: 'input',
                   ),
-                  onPressed: () => _submitOrder(),
+                  //validator: (value) => _validateItemCount(value),
+                  onSaved: (value) => ticketFifthDigit = value,
+                  validator: _validateItemRequired,
                 ),
+              ),
+              Divider(),
+              TextButton(
+                child: Text('Buy'),
+                style: TextButton.styleFrom(
+                  primary: Colors.green,
+                  backgroundColor: Colors.lightGreen.shade100,
+                  onSurface: Colors.pink,
+                  shape: const BeveledRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  textStyle: TextStyle(
+                      color: Colors.red,
+                      fontSize: 30,
+                      fontStyle: FontStyle.italic),
+                ),
+                onPressed: () => _submitOrder(),
               ),
             ],
           ),
