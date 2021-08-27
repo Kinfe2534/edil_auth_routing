@@ -1,5 +1,6 @@
 // home.dart
-import 'package:edil/model/ticket_model.dart';
+
+import 'package:edil/model/lottery_model.dart';
 import 'package:edil/widgets/confine_input.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,8 @@ class _TicketInputState extends State<TicketInput> {
   final double _borderRadius = 8;
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   //order to save
-  Ticket ticketOrder = Ticket();
+  List<TicketOrder> ticketOrders;
+  TicketOrder ticketOrder = TicketOrder();
   String ticketAllDigits;
   String ticketFirstDigit;
   String ticketSecondDigit;
