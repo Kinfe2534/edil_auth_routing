@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:edil/pages/lotteries_pages/buy_lottery.dart';
+import 'package:edil/pages/lotteries_pages/ticket_detail.dart';
 import 'package:edil/service/http_service.dart';
 import 'package:edil/widgets/left_drawer.dart';
 import 'package:edil/widgets/right_drawer.dart';
@@ -15,6 +16,7 @@ class LotteriesPageLoggedOut extends StatefulWidget {
 
 class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
   Future<List<Lottery>> allLotteries;
+
   @override
   void initState() {
     super.initState();
@@ -72,10 +74,12 @@ class LotteriesPageLoggedIn extends StatefulWidget {
 
 class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
   Future<List<Lottery>> allLotteries;
+  Future<List<Ticket>> allTickets;
   @override
   void initState() {
     super.initState();
     allLotteries = HttpService().getLotteries();
+    allTickets = HttpService().getAllTickets();
   }
 
   @override
@@ -86,35 +90,71 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
       ),
       drawer: LeftDrawerLoggedInWidget(),
       endDrawer: RightDrawerWidget(),
-      body: FutureBuilder<List<Lottery>>(
-        future: allLotteries,
-        builder: (context, snapShot) {
-          if (snapShot.hasData) {
-            List<Lottery> lotteries = snapShot.data;
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            FutureBuilder<List<Lottery>>(
+              future: allLotteries,
+              builder: (context, snapShot) {
+                if (snapShot.hasData) {
+                  List<Lottery> lotteries = snapShot.data;
 
-            return ListView(
-              children: lotteries
-                  .map((Lottery lottery) => Column(children: <Widget>[
-                        ListTile(
-                          leading: Text(lottery.id.toString()),
-                          title: Text(lottery.type),
-                          trailing: Icon(Icons.forward_10_rounded),
-                          subtitle: Text(lottery.id.toString()),
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      // LotteryDetail(lottery: lottery))),
-                                      BuyLottery(lottery: lottery))),
-                        ),
-                        Divider(color: Colors.grey),
-                      ]))
-                  .toList(),
-            );
-          } else if (snapShot.hasError) {
-            return Center(child: Text('Has Error'));
-          }
-          return Center(child: CircularProgressIndicator());
-        },
+                  return ListView(
+                    children: lotteries
+                        .map((Lottery lottery) => Column(children: <Widget>[
+                              ListTile(
+                                leading: Text(lottery.id.toString()),
+                                title: Text(lottery.type),
+                                trailing: Icon(Icons.forward_10_rounded),
+                                subtitle: Text(lottery.id.toString()),
+                                onTap: () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            // LotteryDetail(lottery: lottery))),
+                                            BuyLottery(lottery: lottery))),
+                              ),
+                              Divider(color: Colors.grey),
+                            ]))
+                        .toList(),
+                  );
+                } else if (snapShot.hasError) {
+                  return Center(child: Text('Has Error'));
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+            FutureBuilder<List<Ticket>>(
+              future: allTickets,
+              builder: (context, snapShot) {
+                if (snapShot.hasData) {
+                  List<Ticket> tickets = snapShot.data;
+
+                  return ListView(
+                    children: tickets
+                        .map((Ticket ticket) => Column(children: <Widget>[
+                              ListTile(
+                                leading: Text(ticket.id.toString()),
+                                title: Text(ticket.ticket_number),
+                                trailing: Icon(Icons.forward_10_rounded),
+                                subtitle: Text(ticket.cost.toString()),
+                                onTap: () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            // LotteryDetail(lottery: lottery))),
+                                            TicketDetail(ticket: ticket))),
+                              ),
+                              Divider(color: Colors.grey),
+                            ]))
+                        .toList(),
+                  );
+                } else if (snapShot.hasError) {
+                  return Center(child: Text('Has Error'));
+                }
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

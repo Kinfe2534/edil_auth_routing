@@ -33,7 +33,7 @@ class Lottery {
 
 class Ticket {
   final int id;
-  final int loto_number;
+  final String loto_number;
   final String ticket_number;
   final int cost;
   final User user;
@@ -56,11 +56,11 @@ class Ticket {
   factory Ticket.fromJson(Map<String, dynamic> json) {
     return Ticket(
       id: json['id'] as int,
-      loto_number: json['loto_number'] as int,
+      loto_number: json['loto_number'] as String,
       ticket_number: json['ticket_number'] as String,
       cost: json['cost'] as int,
-      user: json[''] as User,
-      lottery: json['lottery'] as Lottery,
+      user: User.fromJson(json['user']),
+      lottery: Lottery.fromJson(json['lottery']),
       thirdWinner: json['thirdWinner'] as bool,
       secondWinner: json['secondWinner'] as bool,
       firstWinner: json['firstWinner'] as bool,
