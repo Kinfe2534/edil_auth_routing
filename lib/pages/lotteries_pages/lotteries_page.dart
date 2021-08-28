@@ -177,11 +177,20 @@ class LotteryList extends StatelessWidget {
                           title: Text(lottery.type),
                           trailing: Icon(Icons.arrow_forward_sharp),
                           subtitle: Text(lottery.id.toString()),
-                          onTap: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      // LotteryDetail(lottery: lottery))),
-                                      BuyLottery(lottery: lottery))),
+                          // onTap: () async{
+                          // final result= await   Navigator.of(context).push(MaterialPageRoute(
+                          //  builder: (context) =>
+                          // LotteryDetail(lottery: lottery))),
+                          //  BuyLottery(lottery: lottery)));},
+                          onTap: () async {
+                            final result = await Navigator.push<String>(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        // LotteryDetail(lottery: lottery))),
+                                        BuyLottery(lottery: lottery)));
+                            print(result);
+                          },
                         ),
                         Divider(color: Colors.grey),
                       ]))

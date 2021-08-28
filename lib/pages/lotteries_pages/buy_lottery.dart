@@ -2,20 +2,25 @@ import 'package:edil/widgets/tickets.dart';
 import 'package:flutter/material.dart';
 import 'package:edil/model/lottery_model.dart';
 
-class BuyLottery extends StatelessWidget {
+class BuyLottery extends StatefulWidget {
   final Lottery lottery;
-
   BuyLottery({@required this.lottery, Key key}) : super(key: key);
 
+  @override
+  _BuyLotteryState createState() => _BuyLotteryState();
+}
+
+class _BuyLotteryState extends State<BuyLottery> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(lottery.type),
+        title: Text(widget.lottery.type),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_back),
         onPressed: () {
+          Navigator.pop(context, "update");
           print('working');
         },
       ),
@@ -30,19 +35,19 @@ class BuyLottery extends StatelessWidget {
                     children: <Widget>[
                       ListTile(
                         title: Text("Lottery Code"),
-                        subtitle: Text(lottery.lotteryCode),
+                        subtitle: Text(widget.lottery.lotteryCode),
                       ),
                       ListTile(
                         title: Text("Id"),
-                        subtitle: Text("${lottery.id}"),
+                        subtitle: Text("${widget.lottery.id}"),
                       ),
                       ListTile(
                         title: Text("Lot Dat"),
-                        subtitle: Text((lottery.lotDay).toString()),
+                        subtitle: Text((widget.lottery.lotDay).toString()),
                       ),
                       ListTile(
                         title: Text("Prize"),
-                        subtitle: Text("${lottery.prize}"),
+                        subtitle: Text("${widget.lottery.prize}"),
                       ),
                     ],
                   ),
