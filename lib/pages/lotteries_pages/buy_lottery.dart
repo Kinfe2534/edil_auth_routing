@@ -14,7 +14,7 @@ class BuyLottery extends StatelessWidget {
         title: Text(lottery.type),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save_alt_outlined),
+        child: Icon(Icons.arrow_back),
         onPressed: () {
           print('working');
         },

@@ -12,7 +12,7 @@ class TicketDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ticket.cost.toString()),
+        title: Text("Ticket Details"),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.delete),
@@ -28,7 +28,7 @@ class TicketDetail extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 ListTile(
-                  title: Text("Lottery Code"),
+                  title: Text("Ticket Number"),
                   subtitle: Text(ticket.loto_number.toString()),
                 ),
                 ListTile(
@@ -36,11 +36,11 @@ class TicketDetail extends StatelessWidget {
                   subtitle: Text("${ticket.id}"),
                 ),
                 ListTile(
-                  title: Text("Lot Dat"),
+                  title: Text("User Cellphone"),
                   subtitle: Text((ticket.user.cellphone).toString()),
                 ),
                 ListTile(
-                  title: Text("Prize"),
+                  title: Text("Email"),
                   subtitle: Text("${ticket.user.email}"),
                 ),
               ],
