@@ -127,7 +127,7 @@ class _TicketInputState extends State<TicketInput> {
                         _inputAdder) /
                     _inputSizeDivider,
                 child: TextButton(
-                  child: Text('Buy'),
+                  child: Text('Add'),
                   style: TextButton.styleFrom(
                     primary: Colors.green,
                     backgroundColor: Colors.lightGreen.shade100,

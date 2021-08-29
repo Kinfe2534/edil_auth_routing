@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:edil/model/auth_model.dart';
+import 'package:edil/model/lottery_model.dart';
 import 'package:edil/service/validation_mixin.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -40,6 +41,7 @@ class FormBloc with ValidationMixin {
   var registerData;
   var loginData;
   var userData;
+  List<Ticket> ticketsTobuy = [];
 
   //register
   dynamic register(BuildContext context) async {

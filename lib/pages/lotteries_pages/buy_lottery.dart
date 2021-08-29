@@ -4,13 +4,15 @@ import 'package:edil/model/lottery_model.dart';
 
 class BuyLottery extends StatefulWidget {
   final Lottery lottery;
-  BuyLottery({@required this.lottery, Key key}) : super(key: key);
+
+  const BuyLottery({@required this.lottery, Key key}) : super(key: key);
 
   @override
   _BuyLotteryState createState() => _BuyLotteryState();
 }
 
 class _BuyLotteryState extends State<BuyLottery> {
+  final bool updateStatus = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +22,7 @@ class _BuyLotteryState extends State<BuyLottery> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.arrow_back),
         onPressed: () {
-          Navigator.pop(context, "update");
+          Navigator.pop(context, updateStatus);
           print('working');
         },
       ),
