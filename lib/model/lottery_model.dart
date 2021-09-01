@@ -117,7 +117,7 @@ class User {
       house_no: json['house_no'] as String,
       user_code: json['user_code'] as String,
       cellphone: json['cellphone'] as String,
-      homephone: json[''] as String,
+      homephone: json['homephone'] as String,
     );
   }
 }
@@ -126,7 +126,7 @@ class TicketOrder {
   int cost;
   int lottery_id;
   int user_id;
-  List<dynamic> loto_numbers;
+  String loto_numbers;
 
   TicketOrder({this.cost, this.lottery_id, this.user_id, this.loto_numbers});
   Map<String, dynamic> toJson() {

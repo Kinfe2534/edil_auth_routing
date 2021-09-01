@@ -1,6 +1,8 @@
 // home.dart
 
 import 'package:edil/model/lottery_model.dart';
+import 'package:edil/service/form_bloc.dart';
+import 'package:edil/service/provider.dart';
 import 'package:edil/widgets/confine_input.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,8 @@ class _TicketInputState extends State<TicketInput> {
   final double _borderRadius = 8;
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   //order to save
-  List<TicketOrder> ticketOrders;
+
+  //List<TicketOrder> ticketOrders = Provider.of(context);
   TicketOrder ticketOrder = TicketOrder();
   String ticketAllDigits;
   String ticketFirstDigit;
@@ -43,6 +46,7 @@ class _TicketInputState extends State<TicketInput> {
 
   @override
   Widget build(BuildContext context) {
+    final FormBloc formBloc = Provider.of(context);
     return SafeArea(
       child: Form(
         key: _formStateKey,
@@ -127,7 +131,7 @@ class _TicketInputState extends State<TicketInput> {
               ),
               Divider(),
               TextButton(
-                child: Text('Buy'),
+                child: Icon(Icons.add),
                 style: TextButton.styleFrom(
                   primary: Colors.green,
                   backgroundColor: Colors.lightGreen.shade100,

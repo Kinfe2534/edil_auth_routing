@@ -1,7 +1,52 @@
 // home.dart
+import 'package:edil/model/lottery_model.dart';
+import 'package:edil/service/form_bloc.dart';
+import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+//import 'package:edil/widgets/form_title.dart';
+
+class Tickets extends StatelessWidget {
+  final Lottery lottery;
+  const Tickets({Key key, this.lottery}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        //  FormTitle(formTitle: "Buy 5 Birr Ticket"),
+        Center(child: Text("Buy 5 Birr Ticket")),
+        Divider(),
+        TicketInput(
+          cost: 5,
+          lottery: lottery,
+        ),
+        Divider(),
+        // FormTitle(formTitle: "Buy 10 Birr Ticket"),
+        Center(child: Text("Buy 10 Birr Ticket")),
+        Divider(),
+        TicketInput(
+          cost: 10,
+          lottery: lottery,
+        ),
+        Divider(),
+        // FormTitle(formTitle: "Buy 50 Birr Ticket"),
+        Center(child: Text("Buy 15 Birr Ticket")),
+        Divider(),
+        TicketInput(
+          cost: 15,
+          lottery: lottery,
+        ),
+        Divider(),
+      ],
+    );
+  }
+}
 
 class TicketInput extends StatefulWidget {
+  final Lottery lottery;
+  final int cost;
+  const TicketInput({Key key, this.cost, this.lottery}) : super(key: key);
   @override
   _TicketInputState createState() => _TicketInputState();
 }
@@ -9,30 +54,43 @@ class TicketInput extends StatefulWidget {
 class _TicketInputState extends State<TicketInput> {
   final int _inputSizeDivider = 6;
   final int _inputSubstract = 34;
-  final int _inputAdder = 10;
+  final int _inputAdder = 0;
   final double _borderRadius = 8;
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
   //order to save
-  Order _order = Order();
+  TicketOrder ticketOrder;
+  String ticketAllDigits;
+  String ticketFirstDigit;
+  String ticketSecondDigit;
+  String ticketThirdDigit;
+  String ticketFourthDigit;
+  String ticketFifthDigit;
+  static final RegExp singleDigit = RegExp(r'\b([0-9])');
   String _validateItemRequired(String value) {
-    return value.isEmpty ? 'Item Required' : null;
+    return singleDigit.hasMatch(value) ? null : "Error";
   }
 
-  String _validateItemCount(String value) {
-    int _valueAsInteger = value.isEmpty ? 0 : int.tryParse(value);
-    return _valueAsInteger == 0 ? 'At least one Item is Required' : null;
-  }
-
-  void _submitOrder() {
+  void _submitOrder(FormBloc formBloc) {
     if (_formStateKey.currentState.validate()) {
       _formStateKey.currentState.save();
-      print('Order Item: ${_order.item}');
-      print('Order Quantity: ${_order.quantity}');
+      ticketAllDigits = ticketFirstDigit +
+          ticketSecondDigit +
+          ticketThirdDigit +
+          ticketFourthDigit +
+          ticketFifthDigit;
+      ticketOrder = new TicketOrder(
+          user_id: formBloc.userData.id,
+          cost: widget.cost,
+          loto_numbers: ticketAllDigits,
+          lottery_id: widget.lottery.id);
+      formBloc.ticketsTobuy.add(ticketOrder);
+      formBloc.addTicketOrder("update");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final FormBloc formBloc = Provider.of(context);
     return SafeArea(
       child: Form(
         key: _formStateKey,
@@ -52,8 +110,8 @@ class _TicketInputState extends State<TicketInput> {
                     //hintText: 'Espresso',
                     labelText: 'input',
                   ),
-                  //validator: (value) => _validateItemRequired(value),
-                  onSaved: (value) => _order.item = value,
+                  onSaved: (value) => ticketFirstDigit = value,
+                  validator: _validateItemRequired,
                 ),
               ),
               Divider(),
@@ -68,8 +126,8 @@ class _TicketInputState extends State<TicketInput> {
                     //hintText: '3',
                     labelText: 'input',
                   ),
-                  //validator: (value) => _validateItemCount(value),
-                  onSaved: (value) => _order.quantity = int.tryParse(value),
+                  onSaved: (value) => ticketSecondDigit = value,
+                  validator: _validateItemRequired,
                 ),
               ),
               Divider(),
@@ -84,8 +142,8 @@ class _TicketInputState extends State<TicketInput> {
                     //hintText: 'Espresso',
                     labelText: 'input',
                   ),
-                  //validator: (value) => _validateItemRequired(value),
-                  onSaved: (value) => _order.item = value,
+                  onSaved: (value) => ticketThirdDigit = value,
+                  validator: _validateItemRequired,
                 ),
               ),
               Divider(),
@@ -100,8 +158,8 @@ class _TicketInputState extends State<TicketInput> {
                     //hintText: '3',
                     labelText: 'input',
                   ),
-                  //validator: (value) => _validateItemCount(value),
-                  onSaved: (value) => _order.quantity = int.tryParse(value),
+                  onSaved: (value) => ticketFourthDigit = value,
+                  validator: _validateItemRequired,
                 ),
               ),
               Divider(),
@@ -116,8 +174,8 @@ class _TicketInputState extends State<TicketInput> {
                     //hintText: '3',
                     labelText: 'input',
                   ),
-                  //validator: (value) => _validateItemCount(value),
-                  onSaved: (value) => _order.quantity = int.tryParse(value),
+                  onSaved: (value) => ticketFifthDigit = value,
+                  validator: _validateItemRequired,
                 ),
               ),
               Divider(),
@@ -139,7 +197,7 @@ class _TicketInputState extends State<TicketInput> {
                         fontSize: 30,
                         fontStyle: FontStyle.italic),
                   ),
-                  onPressed: () => _submitOrder(),
+                  onPressed: () => _submitOrder(formBloc),
                 ),
               ),
             ],
@@ -148,9 +206,4 @@ class _TicketInputState extends State<TicketInput> {
       ),
     );
   }
-}
-
-class Order {
-  String item;
-  int quantity;
 }

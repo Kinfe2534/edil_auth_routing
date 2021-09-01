@@ -16,6 +16,7 @@ class FormBloc with ValidationMixin {
   final _name = new BehaviorSubject<String>();
   final _cellphone = new BehaviorSubject<String>();
   final _errorMessage = new BehaviorSubject<String>();
+  final _ticketOrder = new BehaviorSubject<String>();
 
   Function(String) get changeUsername => _username.sink.add;
   Function(String) get changeEmail => _email.sink.add;
@@ -23,6 +24,7 @@ class FormBloc with ValidationMixin {
   Function(String) get changeName => _name.sink.add;
   Function(String) get changeCellphone => _cellphone.sink.add;
   Function(String) get addError => _errorMessage.sink.add;
+  Function(String) get addTicketOrder => _ticketOrder.sink.add;
 
   Stream<String> get username => _username.stream.transform(validatorUsername);
   Stream<String> get email => _email.stream.transform(validatorEmail);
@@ -31,17 +33,23 @@ class FormBloc with ValidationMixin {
   Stream<String> get cellphone =>
       _cellphone.stream.transform(validatorPhonenumber);
   Stream<String> get errorMessage => _errorMessage.stream;
+  Stream<String> get ticketOrder => _ticketOrder.stream;
 
   Stream<bool> get submitValidSignup => Rx.combineLatest5(
       username, email, password, name, cellphone, (un, e, p, n, cp) => true);
   Stream<bool> get submitValidLogin =>
       Rx.combineLatest2(username, password, (un, p) => true);
-
+//variables
   var authInfo;
   var registerData;
   var loginData;
-  var userData;
-  List<Ticket> ticketsTobuy = [];
+  // Lottery currentLottery;
+  UserData userData;
+  List<TicketOrder> ticketsTobuy = [
+    new TicketOrder(
+        user_id: 1, loto_numbers: "sample", lottery_id: 1, cost: 10),
+    new TicketOrder(user_id: 2, loto_numbers: "sample", lottery_id: 1, cost: 10)
+  ];
 
   //register
   dynamic register(BuildContext context) async {
@@ -92,6 +100,27 @@ class FormBloc with ValidationMixin {
     }
     print(res.statusCode);
   }
+
+  //creat Tciket
+  dynamic createTciket(BuildContext context) async {
+    authInfo = AuthService();
+    loginData = LoginData(username: _username.value, password: _password.value);
+    final res = await authInfo.login(loginData);
+    final data = jsonDecode(res.body) as Map<String, dynamic>;
+    if (res.statusCode == 200) {
+      //Map<String, dynamic> data = jsonDecode(res.body);
+      print('Login statusCode equal to 200');
+      addError(data['message']);
+      userData = UserData.fromJson(data);
+      AuthService.setToken(data['token'], data['refreshtoken']);
+      Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
+      return data;
+    } else {
+      print('Login statusCode not equal to 200');
+      addError(data['message']);
+    }
+    print(res.statusCode);
+  }
   //submit button
   //submit() {
   //_email.value;
@@ -105,5 +134,6 @@ class FormBloc with ValidationMixin {
     _name.close();
     _cellphone.close();
     _errorMessage.close();
+    _ticketOrder.close();
   }
 }

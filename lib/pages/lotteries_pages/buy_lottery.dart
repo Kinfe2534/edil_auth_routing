@@ -1,4 +1,6 @@
-import 'package:edil/widgets/tickets.dart';
+import 'package:edil/widgets/display_ticket_choices.dart';
+import 'package:edil/widgets/ticket_input.dart';
+
 import 'package:flutter/material.dart';
 import 'package:edil/model/lottery_model.dart';
 
@@ -26,40 +28,23 @@ class _BuyLotteryState extends State<BuyLottery> {
           print('working');
         },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: Text("Lottery Code"),
-                        subtitle: Text(widget.lottery.lotteryCode),
-                      ),
-                      ListTile(
-                        title: Text("Id"),
-                        subtitle: Text("${widget.lottery.id}"),
-                      ),
-                      ListTile(
-                        title: Text("Lot Dat"),
-                        subtitle: Text((widget.lottery.lotDay).toString()),
-                      ),
-                      ListTile(
-                        title: Text("Prize"),
-                        subtitle: Text("${widget.lottery.prize}"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Tickets(),
-          ],
+      body: ListView(children: <Widget>[
+        ListTile(
+          leading: Text(widget.lottery.id.toString()),
+          title: Text(widget.lottery.type),
+          trailing: Icon(Icons.arrow_forward_sharp),
+          subtitle: Text(widget.lottery.prize.toString()),
         ),
-      ), //single chiled scrolll view
+        Container(
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: Tickets(
+              lottery: widget.lottery,
+            )),
+        Container(
+            height: MediaQuery.of(context).size.height,
+            child: DisplayTicketChoices()),
+      ]),
+      //single chiled scrolll view
     ); //sca
   }
 }
