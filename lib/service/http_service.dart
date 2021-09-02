@@ -6,14 +6,10 @@ import 'package:flutter_session/flutter_session.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final Uri lotteriesUrl = Uri.parse("http://localhost:8080/api/lottery/all");
-  final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
-  final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
-  final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
   static final SESSION = FlutterSession();
 
   Future<List<Lottery>> getLotteries(Uri uri) async {
-    http.Response res = await http.get(lotteriesUrl);
+    http.Response res = await http.get(uri);
     try {
       if (res.statusCode == 200) {
         List<dynamic> body = jsonDecode(res.body);
@@ -30,7 +26,7 @@ class HttpService {
   }
 
   Future<List<Ticket>> getAllTickets(Uri uri) async {
-    http.Response res = await http.get(allTicketsUrl);
+    http.Response res = await http.get(uri);
     try {
       if (res.statusCode == 200) {
         List<dynamic> body = jsonDecode(res.body);
@@ -46,10 +42,10 @@ class HttpService {
     }
   }
 
-  Future<dynamic> register(SignupData signupData) async {
+  Future<dynamic> register(SignupData signupData, Uri uri) async {
     try {
       var body = jsonEncode(signupData.toJson());
-      http.Response res = await http.post(signupUrl,
+      http.Response res = await http.post(uri,
           headers: {"Content-Type": "application/json"}, body: body);
       return res;
     } catch (e) {
@@ -61,10 +57,10 @@ class HttpService {
     }
   }
 
-  Future<dynamic> login(LoginData loginData) async {
+  Future<dynamic> login(LoginData loginData, Uri uri) async {
     try {
       var body = jsonEncode(loginData.toJson());
-      http.Response res = await http.post(loginUrl,
+      http.Response res = await http.post(uri,
           headers: {"Content-Type": "application/json"}, body: body);
       return res;
     } catch (e) {

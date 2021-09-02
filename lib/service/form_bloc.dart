@@ -10,6 +10,11 @@ import 'package:rxdart/rxdart.dart';
 import 'package:edil/service/http_service.dart';
 
 class FormBloc with ValidationMixin {
+  final Uri lotteriesUrl = Uri.parse("http://localhost:8080/api/lottery/all");
+  final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
+  final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
+  final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
+
   final _username = new BehaviorSubject<String>();
   final _email = new BehaviorSubject<String>();
   final _password = new BehaviorSubject<String>();
@@ -40,7 +45,7 @@ class FormBloc with ValidationMixin {
   Stream<bool> get submitValidLogin =>
       Rx.combineLatest2(username, password, (un, p) => true);
 //variables
-  var authInfo;
+  var authInfo = HttpService();
   var registerData;
   var loginData;
   // Lottery currentLottery;
@@ -53,7 +58,6 @@ class FormBloc with ValidationMixin {
 
   //register
   dynamic register(BuildContext context) async {
-    authInfo = HttpService();
     registerData = SignupData(
       username: _username.value,
       email: _email.value,
@@ -103,7 +107,6 @@ class FormBloc with ValidationMixin {
 
   //creat Tciket
   dynamic createTciket(BuildContext context) async {
-    authInfo = HttpService();
     loginData = LoginData(username: _username.value, password: _password.value);
     final res = await authInfo.login(loginData);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
@@ -121,11 +124,6 @@ class FormBloc with ValidationMixin {
     }
     print(res.statusCode);
   }
-  //submit button
-  //submit() {
-  //_email.value;
-  // _password.value;
-  // }
 
   dispose() {
     _username.close();
