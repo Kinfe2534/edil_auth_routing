@@ -67,6 +67,9 @@ class _TicketInputState extends State<TicketInput> {
   String ticketFifthDigit;
   static final RegExp singleDigit = RegExp(r'\b([0-9])');
   String _validateItemRequired(String value) {
+    if (value.length>=2){return "e";}
+    else if (value.isEmpty){return "e";}
+    else if(value==)
     return singleDigit.hasMatch(value) ? null : "Error";
   }
 
@@ -103,6 +106,7 @@ class _TicketInputState extends State<TicketInput> {
                 width: (MediaQuery.of(context).size.width - _inputSubstract) /
                     _inputSizeDivider,
                 child: TextFormField(
+                  inputFormatters: [],
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius:
@@ -113,6 +117,7 @@ class _TicketInputState extends State<TicketInput> {
                   onSaved: (value) => ticketFirstDigit = value,
                   validator: _validateItemRequired,
                 ),
+                
               ),
               Divider(),
               SizedBox(

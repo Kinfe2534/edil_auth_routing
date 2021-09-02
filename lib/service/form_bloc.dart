@@ -1,15 +1,22 @@
-import 'dart:convert';
+//import 'dart:convert';
 
 import 'package:edil/model/auth_model.dart';
 import 'package:edil/model/lottery_model.dart';
 import 'package:edil/service/validation_mixin.dart';
-import 'package:flutter/cupertino.dart';
+//import 'package:flutter/cupertino.dart';
 
 import 'package:rxdart/rxdart.dart';
 
 import 'package:edil/service/http_service.dart';
 
 class FormBloc with ValidationMixin {
+  var httpService = HttpService();
+  List<TicketOrder> ticketsTobuy = [
+    new TicketOrder(
+        user_id: 1, loto_numbers: "sample", lottery_id: 1, cost: 10),
+    new TicketOrder(user_id: 2, loto_numbers: "sample", lottery_id: 1, cost: 10)
+  ];
+
   final Uri lotteriesUrl = Uri.parse("http://localhost:8080/api/lottery/all");
   final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
   final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
@@ -40,32 +47,25 @@ class FormBloc with ValidationMixin {
   Stream<String> get errorMessage => _errorMessage.stream;
   Stream<String> get ticketOrder => _ticketOrder.stream;
 
-  Stream<bool> get submitValidSignup => Rx.combineLatest5(
-      username, email, password, name, cellphone, (un, e, p, n, cp) => true);
-  Stream<bool> get submitValidLogin =>
-      Rx.combineLatest2(username, password, (un, p) => true);
-//variables
-  var authInfo = HttpService();
-  var registerData;
-  var loginData;
-  // Lottery currentLottery;
-  UserData userData;
-  List<TicketOrder> ticketsTobuy = [
-    new TicketOrder(
-        user_id: 1, loto_numbers: "sample", lottery_id: 1, cost: 10),
-    new TicketOrder(user_id: 2, loto_numbers: "sample", lottery_id: 1, cost: 10)
-  ];
+  Stream<SignupData> get submitValidSignup =>
+      Rx.combineLatest5(username, email, password, name, cellphone,
+          (un, e, p, n, cp) {
+        return SignupData(
+          username: _username.value,
+          email: _email.value,
+          password: _password.value,
+          name: _name.value,
+          cellphone: _cellphone.value,
+        );
+      });
+  Stream<LoginData> get submitValidLogin =>
+      Rx.combineLatest2(username, password, (un, p) {
+        return LoginData(username: _username.value, password: _password.value);
+      });
 
-  //register
-  dynamic register(BuildContext context) async {
-    registerData = SignupData(
-      username: _username.value,
-      email: _email.value,
-      password: _password.value,
-      name: _name.value,
-      cellphone: _cellphone.value,
-    );
-    final res = await authInfo.register(registerData);
+  /*
+  dynamic register(BuildContext context, SignupData signupData) async {
+    final res = await authInfo.register(registerData, signupUrl);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
 
     if (res.statusCode == 200) {
@@ -88,7 +88,7 @@ class FormBloc with ValidationMixin {
   dynamic login(BuildContext context) async {
     authInfo = HttpService();
     loginData = LoginData(username: _username.value, password: _password.value);
-    final res = await authInfo.login(loginData);
+    final res = await authInfo.login(loginData, loginUrl);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
     if (res.statusCode == 200) {
       //Map<String, dynamic> data = jsonDecode(res.body);
@@ -108,7 +108,7 @@ class FormBloc with ValidationMixin {
   //creat Tciket
   dynamic createTciket(BuildContext context) async {
     loginData = LoginData(username: _username.value, password: _password.value);
-    final res = await authInfo.login(loginData);
+    final res = await authInfo.login(loginData, loginUrl);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
     if (res.statusCode == 200) {
       //Map<String, dynamic> data = jsonDecode(res.body);
@@ -124,7 +124,7 @@ class FormBloc with ValidationMixin {
     }
     print(res.statusCode);
   }
-
+*/
   dispose() {
     _username.close();
     _email.close();

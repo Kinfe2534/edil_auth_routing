@@ -18,10 +18,15 @@ class LotteriesPageLoggedOut extends StatefulWidget {
 
 class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
   Future<List<Lottery>> allLotteries;
+  BuildContext context;
+InheritedWidget P = context.ancestorInheritedElementForWidgetOfExactType<Provider>())?.widget;
 
   @override
   void initState() {
     super.initState();
+    final inheritedWidget = context.ancestorInheritedElementForWidgetOfExactType(MyInheritedWidget).widget as MyInheritedWidget;
+
+     InheritedWidget data = context.ancestorInheritedElementForWidgetOfExactType(<Provider>()).widget;
     allLotteries = HttpService().getLotteries();
   }
 
