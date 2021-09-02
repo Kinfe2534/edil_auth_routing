@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:rxdart/rxdart.dart';
 
-import 'auth_service.dart';
+import 'package:edil/service/http_service.dart';
 
 class FormBloc with ValidationMixin {
   final _username = new BehaviorSubject<String>();
@@ -53,7 +53,7 @@ class FormBloc with ValidationMixin {
 
   //register
   dynamic register(BuildContext context) async {
-    authInfo = AuthService();
+    authInfo = HttpService();
     registerData = SignupData(
       username: _username.value,
       email: _email.value,
@@ -69,7 +69,7 @@ class FormBloc with ValidationMixin {
       addError(data['message']);
 
       print(data.toString());
-      AuthService.setToken(data['token'], data['refreshtoken']);
+      HttpService.setToken(data['token'], data['refreshtoken']);
       Navigator.pop(context);
       //Navigator.pushNamed(context, '/home');
       return data;
@@ -82,7 +82,7 @@ class FormBloc with ValidationMixin {
 
   //login
   dynamic login(BuildContext context) async {
-    authInfo = AuthService();
+    authInfo = HttpService();
     loginData = LoginData(username: _username.value, password: _password.value);
     final res = await authInfo.login(loginData);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
@@ -91,7 +91,7 @@ class FormBloc with ValidationMixin {
       print('Login statusCode equal to 200');
       addError(data['message']);
       userData = UserData.fromJson(data);
-      AuthService.setToken(data['token'], data['refreshtoken']);
+      HttpService.setToken(data['token'], data['refreshtoken']);
       Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
       return data;
     } else {
@@ -103,7 +103,7 @@ class FormBloc with ValidationMixin {
 
   //creat Tciket
   dynamic createTciket(BuildContext context) async {
-    authInfo = AuthService();
+    authInfo = HttpService();
     loginData = LoginData(username: _username.value, password: _password.value);
     final res = await authInfo.login(loginData);
     final data = jsonDecode(res.body) as Map<String, dynamic>;
@@ -112,7 +112,7 @@ class FormBloc with ValidationMixin {
       print('Login statusCode equal to 200');
       addError(data['message']);
       userData = UserData.fromJson(data);
-      AuthService.setToken(data['token'], data['refreshtoken']);
+      HttpService.setToken(data['token'], data['refreshtoken']);
       Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
       return data;
     } else {
