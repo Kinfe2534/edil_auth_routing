@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:edil/pages/lotteries_pages/buy_lottery.dart';
 import 'package:edil/pages/lotteries_pages/ticket_detail.dart';
 import 'package:edil/service/form_bloc.dart';
-import 'package:edil/service/http_service.dart';
 import 'package:edil/service/provider.dart';
 import 'package:edil/widgets/left_drawer.dart';
 import 'package:edil/widgets/right_drawer.dart';
@@ -18,16 +17,14 @@ class LotteriesPageLoggedOut extends StatefulWidget {
 
 class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
   Future<List<Lottery>> allLotteries;
-  BuildContext context;
-InheritedWidget P = context.ancestorInheritedElementForWidgetOfExactType<Provider>())?.widget;
+  FormBloc formBloc;
 
   @override
   void initState() {
     super.initState();
-    final inheritedWidget = context.ancestorInheritedElementForWidgetOfExactType(MyInheritedWidget).widget as MyInheritedWidget;
 
-     InheritedWidget data = context.ancestorInheritedElementForWidgetOfExactType(<Provider>()).widget;
-    allLotteries = HttpService().getLotteries();
+    formBloc = Provider.of(context);
+    allLotteries = formBloc.httpService.getLotteries(formBloc.allTicketsUrl);
   }
 
   @override
@@ -83,11 +80,14 @@ class LotteriesPageLoggedIn extends StatefulWidget {
 class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
   Future<List<Lottery>> allLotteries;
   Future<List<Ticket>> allTickets;
+  FormBloc formBloc;
+
   @override
   void initState() {
     super.initState();
-    allLotteries = HttpService().getLotteries();
-    allTickets = HttpService().getAllTickets();
+    formBloc = Provider.of(context);
+    allLotteries = formBloc.httpService.getLotteries(formBloc.allTicketsUrl);
+    allTickets = formBloc.httpService.getAllTickets(formBloc.allTicketsUrl);
   }
 
   @override

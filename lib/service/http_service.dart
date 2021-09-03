@@ -39,7 +39,8 @@ class HttpService {
         headers: {"Content-Type": "application/json"}, body: body);
 
     if (res.statusCode == 200) {
-      return res;
+      final data = jsonDecode(res.body) as Map<String, dynamic>;
+      return data;
     } else {
       throw Exception("Failed to register");
     }

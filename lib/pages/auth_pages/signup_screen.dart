@@ -1,3 +1,4 @@
+import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/helper.dart';
 import 'package:edil/service/provider.dart';
@@ -123,7 +124,7 @@ class _SignupState extends State<Signup> {
   }
 
   Widget _button(FormBloc formBloc) {
-    return StreamBuilder<bool>(
+    return StreamBuilder<SignupData>(
         stream: formBloc.submitValidSignup,
         builder: (context, snapshot) {
           return Padding(
@@ -134,7 +135,12 @@ class _SignupState extends State<Signup> {
                   print("has error");
                   return null;
                 }
-                return formBloc.register(context);
+                return () async {
+                  dynamic data = await formBloc.httpService
+                      .register(snapshot.data, formBloc.signupUrl);
+                  formBloc.addError(data['message']);
+                  Navigator.pop(context);
+                };
               },
               child: const Icon(Icons.arrow_forward),
               color: Colors.amber,

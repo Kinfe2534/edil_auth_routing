@@ -1,3 +1,4 @@
+import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/helper.dart';
 import 'package:edil/service/provider.dart';
@@ -102,7 +103,7 @@ class _LoginState extends State<Login> {
   }
 
   Widget _button(FormBloc formBloc) {
-    return StreamBuilder<bool>(
+    return StreamBuilder<LoginData>(
         stream: formBloc.submitValidLogin,
         builder: (context, snapshot) {
           return Padding(
@@ -112,7 +113,8 @@ class _LoginState extends State<Login> {
                 if (snapshot.hasError) {
                   return null;
                 }
-                return formBloc.login(context);
+                return formBloc.httpService
+                    .login(snapshot.data, formBloc.loginUrl);
               },
               child: const Icon(Icons.arrow_forward),
               color: Colors.amber,

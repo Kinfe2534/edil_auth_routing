@@ -10,14 +10,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:edil/service/http_service.dart';
 
 class FormBloc with ValidationMixin {
-  var httpService = HttpService();
+  UserData userData;
+  HttpService httpService = HttpService();
   List<TicketOrder> ticketsTobuy = [
     new TicketOrder(
         user_id: 1, loto_numbers: "sample", lottery_id: 1, cost: 10),
     new TicketOrder(user_id: 2, loto_numbers: "sample", lottery_id: 1, cost: 10)
   ];
 
-  final Uri lotteriesUrl = Uri.parse("http://localhost:8080/api/lottery/all");
   final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
   final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
   final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
