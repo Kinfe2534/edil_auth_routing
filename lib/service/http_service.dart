@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class HttpService {
   Future<List<Lottery>> getLotteries() async {
     final Uri allLotteriessUrl =
-        Uri.parse("http://localhost:8080/api/ticket/all");
+        Uri.parse("http://localhost:8080/api/lottery/all");
 
     http.Response res = await http.get(allLotteriessUrl);
 
