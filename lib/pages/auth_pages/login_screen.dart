@@ -113,8 +113,7 @@ class _LoginState extends State<Login> {
                 if (snapshot.hasError) {
                   return null;
                 }
-                return formBloc.httpService
-                    .login(snapshot.data, formBloc.loginUrl);
+                return formBloc.httpService.login(snapshot.data);
               },
               child: const Icon(Icons.arrow_forward),
               color: Colors.amber,

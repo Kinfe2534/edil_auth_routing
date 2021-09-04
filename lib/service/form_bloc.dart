@@ -18,10 +18,6 @@ class FormBloc with ValidationMixin {
     new TicketOrder(user_id: 2, loto_numbers: "sample", lottery_id: 1, cost: 10)
   ];
 
-  final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
-  final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
-  final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
-
   final _username = new BehaviorSubject<String>();
   final _email = new BehaviorSubject<String>();
   final _password = new BehaviorSubject<String>();

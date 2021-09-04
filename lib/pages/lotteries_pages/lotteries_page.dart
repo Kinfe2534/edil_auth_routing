@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:edil/pages/lotteries_pages/buy_lottery.dart';
 import 'package:edil/pages/lotteries_pages/ticket_detail.dart';
 import 'package:edil/service/form_bloc.dart';
+import 'package:edil/service/http_service.dart';
 import 'package:edil/service/provider.dart';
 import 'package:edil/widgets/left_drawer.dart';
 import 'package:edil/widgets/right_drawer.dart';
@@ -17,14 +18,12 @@ class LotteriesPageLoggedOut extends StatefulWidget {
 
 class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
   Future<List<Lottery>> allLotteries;
-  FormBloc formBloc;
 
   @override
   void initState() {
     super.initState();
 
-    formBloc = Provider.of(context);
-    allLotteries = formBloc.httpService.getLotteries(formBloc.allTicketsUrl);
+    allLotteries = HttpService().getLotteries();
   }
 
   @override
@@ -47,7 +46,7 @@ class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
                   .map((Lottery lottery) => Column(children: <Widget>[
                         ListTile(
                             leading: Text(lottery.id.toString()),
-                            title: Text(lottery.type),
+                            title: Text(lottery.type.toString()),
                             trailing: Icon(Icons.arrow_forward_sharp),
                             subtitle: Text(lottery.id.toString()),
                             onTap: () {
@@ -80,14 +79,12 @@ class LotteriesPageLoggedIn extends StatefulWidget {
 class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
   Future<List<Lottery>> allLotteries;
   Future<List<Ticket>> allTickets;
-  FormBloc formBloc;
 
   @override
   void initState() {
     super.initState();
-    formBloc = Provider.of(context);
-    allLotteries = formBloc.httpService.getLotteries(formBloc.allTicketsUrl);
-    allTickets = formBloc.httpService.getAllTickets(formBloc.allTicketsUrl);
+    allLotteries = HttpService().getLotteries();
+    allTickets = HttpService().getAllTickets();
   }
 
   @override

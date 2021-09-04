@@ -136,8 +136,8 @@ class _SignupState extends State<Signup> {
                   return null;
                 }
                 return () async {
-                  dynamic data = await formBloc.httpService
-                      .register(snapshot.data, formBloc.signupUrl);
+                  dynamic data =
+                      await formBloc.httpService.register(snapshot.data);
                   formBloc.addError(data['message']);
                   Navigator.pop(context);
                 };

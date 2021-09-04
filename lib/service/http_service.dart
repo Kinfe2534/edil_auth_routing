@@ -5,8 +5,11 @@ import 'package:edil/model/lottery_model.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  Future<List<Lottery>> getLotteries(Uri uri) async {
-    http.Response res = await http.get(uri);
+  Future<List<Lottery>> getLotteries() async {
+    final Uri allLotteriessUrl =
+        Uri.parse("http://localhost:8080/api/ticket/all");
+
+    http.Response res = await http.get(allLotteriessUrl);
 
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -19,8 +22,9 @@ class HttpService {
     }
   }
 
-  Future<List<Ticket>> getAllTickets(Uri uri) async {
-    http.Response res = await http.get(uri);
+  Future<List<Ticket>> getAllTickets() async {
+    final Uri allTicketsUrl = Uri.parse("http://localhost:8080/api/ticket/all");
+    http.Response res = await http.get(allTicketsUrl);
 
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -33,9 +37,10 @@ class HttpService {
     }
   }
 
-  Future<dynamic> register(SignupData signupData, Uri uri) async {
+  Future<dynamic> register(SignupData signupData) async {
+    final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
     var body = jsonEncode(signupData.toJson());
-    http.Response res = await http.post(uri,
+    http.Response res = await http.post(signupUrl,
         headers: {"Content-Type": "application/json"}, body: body);
 
     if (res.statusCode == 200) {
@@ -46,9 +51,10 @@ class HttpService {
     }
   }
 
-  Future<UserData> login(LoginData loginData, Uri uri) async {
+  Future<UserData> login(LoginData loginData) async {
+    final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
     var body = jsonEncode(loginData.toJson());
-    http.Response res = await http.post(uri,
+    http.Response res = await http.post(loginUrl,
         headers: {"Content-Type": "application/json"}, body: body);
 
     if (res.statusCode == 200) {
