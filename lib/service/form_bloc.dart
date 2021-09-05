@@ -25,6 +25,7 @@ class FormBloc with ValidationMixin {
   final _cellphone = new BehaviorSubject<String>();
   final _errorMessage = new BehaviorSubject<String>();
   final _ticketOrder = new BehaviorSubject<String>();
+  final _digitField = new BehaviorSubject<String>();
 
   Function(String) get changeUsername => _username.sink.add;
   Function(String) get changeEmail => _email.sink.add;
@@ -33,6 +34,7 @@ class FormBloc with ValidationMixin {
   Function(String) get changeCellphone => _cellphone.sink.add;
   Function(String) get addError => _errorMessage.sink.add;
   Function(String) get addTicketOrder => _ticketOrder.sink.add;
+  Function(String) get addDigitField => _digitField.sink.add;
 
   Stream<String> get username => _username.stream.transform(validatorUsername);
   Stream<String> get email => _email.stream.transform(validatorEmail);
@@ -42,6 +44,7 @@ class FormBloc with ValidationMixin {
       _cellphone.stream.transform(validatorPhonenumber);
   Stream<String> get errorMessage => _errorMessage.stream;
   Stream<String> get ticketOrder => _ticketOrder.stream;
+  Stream<String> get digitField => _digitField.stream;
 
   Stream<SignupData> get submitValidSignup =>
       Rx.combineLatest5(username, email, password, name, cellphone,
@@ -129,5 +132,6 @@ class FormBloc with ValidationMixin {
     _cellphone.close();
     _errorMessage.close();
     _ticketOrder.close();
+    _digitField.close();
   }
 }

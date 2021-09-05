@@ -124,23 +124,27 @@ class _SignupState extends State<Signup> {
   }
 
   Widget _button(FormBloc formBloc) {
+    FormBloc formBloc = Provider.of(context);
     return StreamBuilder<SignupData>(
         stream: formBloc.submitValidSignup,
         builder: (context, snapshot) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (snapshot.hasError) {
                   print("has error");
                   return null;
+                } else {
+                  try {
+                    dynamic data =
+                        await formBloc.httpService.register(snapshot.data);
+                    formBloc.addError(data['message']);
+                    Navigator.pop(context);
+                  } catch (e) {
+                    print("Exception caught in register");
+                  }
                 }
-                return () async {
-                  dynamic data =
-                      await formBloc.httpService.register(snapshot.data);
-                  formBloc.addError(data['message']);
-                  Navigator.pop(context);
-                };
               },
               child: const Icon(Icons.arrow_forward),
               color: Colors.amber,

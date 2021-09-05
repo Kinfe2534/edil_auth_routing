@@ -4,6 +4,7 @@ import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 //import 'package:edil/widgets/form_title.dart';
 
 class Tickets extends StatelessWidget {
@@ -52,30 +53,12 @@ class TicketInput extends StatefulWidget {
 }
 
 class _TicketInputState extends State<TicketInput> {
-  final int _inputSizeDivider = 6;
-  final int _inputSubstract = 34;
-  final int _inputAdder = 0;
-  final double _borderRadius = 8;
   final GlobalKey<FormState> _formStateKey = GlobalKey<FormState>();
-  //order to save
+
   TicketOrder ticketOrder;
-  String ticketAllDigits;
-  String ticketFirstDigit;
-  String ticketSecondDigit;
-  String ticketThirdDigit;
-  String ticketFourthDigit;
-  String ticketFifthDigit;
+  List<String> allDigits = ['a', 'b', 'c', 'd', 'e'];
 
-  String _validateItemRequired(String value) {
-    if (value.length >= 2) {
-      return "e";
-    } else if (value.isEmpty) {
-      return "e";
-    }
-    return value.isEmpty ? null : "E";
-  }
-
-  void _submitOrder(FormBloc formBloc) {
+  /*void _submitOrder(FormBloc formBloc) {
     if (_formStateKey.currentState.validate()) {
       _formStateKey.currentState.save();
       ticketAllDigits = ticketFirstDigit +
@@ -87,6 +70,19 @@ class _TicketInputState extends State<TicketInput> {
           user_id: formBloc.userData.id,
           cost: widget.cost,
           loto_numbers: ticketAllDigits,
+          lottery_id: widget.lottery.id);
+      formBloc.ticketsTobuy.add(ticketOrder);
+      formBloc.addTicketOrder("update");
+    }
+  }*/
+  void _submitOrder(FormBloc formBloc) {
+    if (_formStateKey.currentState.validate()) {
+      _formStateKey.currentState.save();
+
+      ticketOrder = new TicketOrder(
+          user_id: formBloc.userData.id,
+          cost: widget.cost,
+          loto_numbers: allDigits.join(),
           lottery_id: widget.lottery.id);
       formBloc.ticketsTobuy.add(ticketOrder);
       formBloc.addTicketOrder("update");
@@ -104,93 +100,33 @@ class _TicketInputState extends State<TicketInput> {
           padding: EdgeInsets.all(16.0),
           child: Row(
             children: <Widget>[
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
-                child: TextFormField(
-                  inputFormatters: [],
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius))),
-                    //hintText: 'Espresso',
-                    labelText: 'input',
-                  ),
-                  onSaved: (value) => ticketFirstDigit = value,
-                  validator: _validateItemRequired,
-                  maxLength: 1,
-                ),
+              DigitField(
+                allDigit: allDigits,
+                index: 0,
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius))),
-                    //hintText: '3',
-                    labelText: 'input',
-                  ),
-                  onSaved: (value) => ticketSecondDigit = value,
-                  validator: _validateItemRequired,
-                ),
+              DigitField(
+                allDigit: allDigits,
+                index: 1,
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius))),
-                    //hintText: 'Espresso',
-                    labelText: 'input',
-                  ),
-                  onSaved: (value) => ticketThirdDigit = value,
-                  validator: _validateItemRequired,
-                ),
+              DigitField(
+                allDigit: allDigits,
+                index: 2,
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius))),
-                    //hintText: '3',
-                    labelText: 'input',
-                  ),
-                  onSaved: (value) => ticketFourthDigit = value,
-                  validator: _validateItemRequired,
-                ),
+              DigitField(
+                allDigit: allDigits,
+                index: 3,
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - _inputSubstract) /
-                    _inputSizeDivider,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(_borderRadius))),
-                    //hintText: '3',
-                    labelText: 'input',
-                  ),
-                  onSaved: (value) => ticketFifthDigit = value,
-                  validator: _validateItemRequired,
-                ),
+              DigitField(
+                allDigit: allDigits,
+                index: 4,
               ),
               Divider(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width -
-                        _inputSubstract +
-                        _inputAdder) /
-                    _inputSizeDivider,
+              Container(
+                width: MediaQuery.of(context).size.width / 6,
                 child: TextButton(
                   child: Text('Add'),
                   style: TextButton.styleFrom(
@@ -212,5 +148,38 @@ class _TicketInputState extends State<TicketInput> {
         ),
       ),
     );
+  }
+}
+
+class DigitField extends StatelessWidget {
+  // final Function fn;
+  final List<String> allDigit;
+  final int index;
+  const DigitField({Key key, this.allDigit, this.index}) : super(key: key);
+
+  String _validateItemRequired(String value) {
+    return int.tryParse(value) == null ? "e" : null;
+  }
+
+  void _digitSaver(String value, List<String> allDigit, int index) {
+    allDigit[index] = value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width / 7,
+        child: TextFormField(
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12.0))),
+              labelText: '<0-9>',
+              hintText: "input"),
+          onSaved: (value) => _digitSaver(value, allDigit, index),
+          validator: _validateItemRequired,
+          maxLength: 1,
+        ));
   }
 }

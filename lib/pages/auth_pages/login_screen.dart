@@ -103,17 +103,28 @@ class _LoginState extends State<Login> {
   }
 
   Widget _button(FormBloc formBloc) {
+    FormBloc formBloc = Provider.of(context);
     return StreamBuilder<LoginData>(
         stream: formBloc.submitValidLogin,
         builder: (context, snapshot) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (snapshot.hasError) {
+                  print("has error");
                   return null;
+                } else {
+                  try {
+                    dynamic data =
+                        await formBloc.httpService.login(snapshot.data);
+                    formBloc.userData = data;
+                    formBloc.addError(data['message']);
+                    Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
+                  } catch (e) {
+                    print("Exception caught in login");
+                  }
                 }
-                return formBloc.httpService.login(snapshot.data);
               },
               child: const Icon(Icons.arrow_forward),
               color: Colors.amber,
