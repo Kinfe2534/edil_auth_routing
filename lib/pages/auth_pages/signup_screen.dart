@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/helper.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Signup extends StatefulWidget {
   const Signup({Key key}) : super(key: key);
@@ -125,25 +128,36 @@ class _SignupState extends State<Signup> {
 
   Widget _button(FormBloc formBloc) {
     FormBloc formBloc = Provider.of(context);
+    void _signupNavigator(FormBloc formBloc, SignupData signupData) async {
+      http.Response res = await formBloc.httpService.register(signupData);
+      try {
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
+          formBloc.addError(data["message"]);
+          Navigator.pop(context);
+        } else {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
+          formBloc.addError(data["message"]);
+          print(data['message']);
+          throw Exception(data);
+        }
+      } catch (e) {
+        print("Exception happened in register");
+      }
+    }
+
     return StreamBuilder<SignupData>(
         stream: formBloc.submitValidSignup,
         builder: (context, snapshot) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: RaisedButton(
-              onPressed: () async {
+              onPressed: () {
                 if (snapshot.hasError) {
                   print("has error");
                   return null;
                 } else {
-                  try {
-                    dynamic data =
-                        await formBloc.httpService.register(snapshot.data);
-                    formBloc.addError(data['message']);
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print("Exception caught in register");
-                  }
+                  _signupNavigator(formBloc, snapshot.data);
                 }
               },
               child: const Icon(Icons.arrow_forward),

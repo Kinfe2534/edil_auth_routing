@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/helper.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -104,26 +107,37 @@ class _LoginState extends State<Login> {
 
   Widget _button(FormBloc formBloc) {
     FormBloc formBloc = Provider.of(context);
+    void _loginNavigator(FormBloc formBloc, LoginData loginData) async {
+      http.Response res = await formBloc.httpService.login(loginData);
+      try {
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
+          formBloc.userData = UserData.fromJson(data);
+          formBloc.addError(data['message']);
+          Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
+        } else if (res.statusCode == 401) {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
+          formBloc.addError(data['message']);
+        } else {
+          throw Exception("Failed to login");
+        }
+      } catch (e) {
+        print("Exception happened in login");
+      }
+    }
+
     return StreamBuilder<LoginData>(
         stream: formBloc.submitValidLogin,
         builder: (context, snapshot) {
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: RaisedButton(
-              onPressed: () async {
+              onPressed: () {
                 if (snapshot.hasError) {
                   print("has error");
                   return null;
                 } else {
-                  try {
-                    dynamic data =
-                        await formBloc.httpService.login(snapshot.data);
-                    formBloc.userData = data;
-                    formBloc.addError(data['message']);
-                    Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
-                  } catch (e) {
-                    print("Exception caught in login");
-                  }
+                  _loginNavigator(formBloc, snapshot.data);
                 }
               },
               child: const Icon(Icons.arrow_forward),

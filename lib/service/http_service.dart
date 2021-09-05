@@ -43,47 +43,20 @@ class HttpService {
     }
   }
 
-  Future<dynamic> register(SignupData signupData) async {
+  Future<http.Response> register(SignupData signupData) async {
     final Uri signupUrl = Uri.parse("http://localhost:8080/api/auth/signup");
     var body = jsonEncode(signupData.toJson());
     http.Response res = await http.post(signupUrl,
         headers: {"Content-Type": "application/json"}, body: body);
-    try {
-      if (res.statusCode == 200) {
-        final data = jsonDecode(res.body) as Map<String, dynamic>;
-        return data;
-      } else {
-        final data = jsonDecode(res.body) as Map<String, dynamic>;
-        print(data['message']);
-        throw Exception(data);
-      }
-    } catch (e) {
-      print("Exception happened in register");
-    }
+    return res;
   }
 
-  Future<dynamic> login(LoginData loginData) async {
+  Future<http.Response> login(LoginData loginData) async {
     final Uri loginUrl = Uri.parse("http://localhost:8080/api/auth/signin");
     var body = jsonEncode(loginData.toJson());
+
     http.Response res = await http.post(loginUrl,
         headers: {"Content-Type": "application/json"}, body: body);
-    try {
-      if (res.statusCode == 200) {
-        final data = jsonDecode(res.body) as Map<String, dynamic>;
-        return UserData.fromJson(data);
-      } else if (res.statusCode != 200) {
-        final data = jsonDecode(res.body) as Map<String, dynamic>;
-        return data;
-      }
-      {
-        final data = jsonDecode(res.body) as Map<String, dynamic>;
-
-        print(res.statusCode);
-        print(data['message']);
-        throw Exception("Failed to login");
-      }
-    } catch (e) {
-      print("Exception happened in login");
-    }
+    return res;
   }
 }
