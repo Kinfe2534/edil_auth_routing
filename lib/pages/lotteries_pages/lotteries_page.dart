@@ -95,16 +95,20 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
       ),
       drawer: LeftDrawerLoggedInWidget(),
       endDrawer: RightDrawerWidget(),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Divider(),
           Text("Available Lotteries"),
           Divider(),
-          LotteryList(allLotteries: allLotteries),
+          Container(
+              height: MediaQuery.of(context).size.height / 1,
+              child: LotteryList(allLotteries: allLotteries)),
           Divider(),
           Text("Your Tickets"),
           Divider(),
-          TicketList(allTickets: allTickets),
+          Container(
+              height: MediaQuery.of(context).size.height / .8,
+              child: TicketList(allTickets: allTickets)),
         ],
       ),
     );
