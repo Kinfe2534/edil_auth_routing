@@ -1,7 +1,7 @@
 // birthdays.dart
 import 'package:flutter/material.dart';
 
-class Birthdays extends StatelessWidget {
+class GetAllWinners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

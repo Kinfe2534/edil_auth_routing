@@ -1,18 +1,18 @@
-// gratitude.dart
+// reminders.dart
 import 'package:flutter/material.dart';
 
-class Gratitude extends StatelessWidget {
+class UpdateLottery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gratitude'),
+        title: Text('Reminders'),
       ),
       body: Center(
         child: Icon(
-          Icons.sentiment_satisfied,
+          Icons.access_alarm,
           size: 120.0,
-          color: Colors.lightGreen,
+          color: Colors.purple,
         ),
       ),
     );

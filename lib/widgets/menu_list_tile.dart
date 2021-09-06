@@ -2,9 +2,9 @@ import 'package:edil/pages/auth_pages/login_screen.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:edil/pages/drawer_pages/birthdays.dart';
-import 'package:edil/pages/drawer_pages/gratitude.dart';
-import 'package:edil/pages/drawer_pages/reminders.dart';
+import 'package:edil/pages/drawer_pages/getAllWinners.dart';
+import 'package:edil/pages/drawer_pages/draw.dart';
+import 'package:edil/pages/drawer_pages/updateLottery.dart';
 
 class MenuListTileLoggedOutWidget extends StatefulWidget {
   const MenuListTileLoggedOutWidget({Key key}) : super(key: key);
@@ -22,39 +22,39 @@ class _MenuListTileLoggedOutWidgetState
       children: <Widget>[
         ListTile(
           leading: Icon(Icons.cake),
-          title: Text('Birthdays'),
+          title: Text('Get All Winners'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Birthdays(),
+                builder: (context) => GetAllWinners(),
               ),
             );
           },
         ),
         ListTile(
           leading: Icon(Icons.sentiment_satisfied),
-          title: Text('Gratitude'),
+          title: Text('Draw'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Gratitude(),
+                builder: (context) => Draw(),
               ),
             );
           },
         ),
         ListTile(
           leading: Icon(Icons.alarm),
-          title: Text('Reminders'),
+          title: Text('Update Lottery'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Reminders(),
+                builder: (context) => UpdateLottery(),
               ),
             );
           },
@@ -103,39 +103,39 @@ class _MenuListTileLoggedInWidgetState
       children: <Widget>[
         ListTile(
           leading: Icon(Icons.cake),
-          title: Text('Birthdays'),
+          title: Text('Get All Winners'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Birthdays(),
+                builder: (context) => GetAllWinners(),
               ),
             );
           },
         ),
         ListTile(
           leading: Icon(Icons.sentiment_satisfied),
-          title: Text('Gratitude'),
+          title: Text('Draw'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Gratitude(),
+                builder: (context) => Draw(),
               ),
             );
           },
         ),
         ListTile(
           leading: Icon(Icons.alarm),
-          title: Text('Reminders'),
+          title: Text('Update Lottery'),
           onTap: () {
             Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Reminders(),
+                builder: (context) => UpdateLottery(),
               ),
             );
           },

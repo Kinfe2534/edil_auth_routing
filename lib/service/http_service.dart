@@ -5,7 +5,7 @@ import 'package:edil/model/lottery_model.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  Future<List<Lottery>> getLotteries() async {
+  Future<List<Lottery>> getAllLotteries() async {
     final Uri allLotteriessUrl =
         Uri.parse("http://localhost:8080/api/lottery/all");
 
@@ -57,6 +57,50 @@ class HttpService {
 
     http.Response res = await http.post(loginUrl,
         headers: {"Content-Type": "application/json"}, body: body);
+    return res;
+  }
+
+  Future<http.Response> createTicket(TicketOrder ticketOrder) async {
+    final Uri createTicketUrl =
+        Uri.parse("http://localhost:8080/api/ticket/create");
+    var body = jsonEncode(ticketOrder.toJson());
+
+    http.Response res = await http.post(createTicketUrl,
+        headers: {"Content-Type": "application/json"}, body: body);
+    return res;
+  }
+
+  Future<http.Response> createLottery(LotteryOrder lotteryOrder) async {
+    final Uri createLotteryUrl =
+        Uri.parse("http://localhost:8080/api/lottery/create");
+    var body = jsonEncode(lotteryOrder.toJson());
+
+    http.Response res = await http.post(createLotteryUrl,
+        headers: {"Content-Type": "application/json"}, body: body);
+    return res;
+  }
+
+  Future<http.Response> getWinners() async {
+    final Uri getWinnersUrl =
+        Uri.parse("http://localhost:8080/api/lottery/getwinners?id=2");
+    http.Response res = await http.get(getWinnersUrl);
+
+    return res;
+  }
+
+  Future<http.Response> draw() async {
+    final Uri drawUrl =
+        Uri.parse("http://localhost:8080/api/lottery/draw?id=4");
+    http.Response res = await http.get(drawUrl);
+
+    return res;
+  }
+
+  Future<http.Response> updateLottery() async {
+    final Uri updateLotteryUrl =
+        Uri.parse("http://localhost:8080/api/lottery/update");
+    http.Response res = await http.put(updateLotteryUrl);
+
     return res;
   }
 }

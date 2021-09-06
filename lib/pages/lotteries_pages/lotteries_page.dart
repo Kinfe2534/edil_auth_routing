@@ -23,7 +23,7 @@ class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
   void initState() {
     super.initState();
 
-    allLotteries = HttpService().getLotteries();
+    allLotteries = HttpService().getAllLotteries();
   }
 
   @override
@@ -83,7 +83,7 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
   @override
   void initState() {
     super.initState();
-    allLotteries = HttpService().getLotteries();
+    allLotteries = HttpService().getAllLotteries();
     allTickets = HttpService().getAllTickets();
   }
 
