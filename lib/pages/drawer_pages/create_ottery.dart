@@ -66,107 +66,144 @@ class _CreateLotteryState extends State<CreateLottery> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                      width: MediaQuery.of(context).size.width / 4,
-                      child: Text("Lottery Type")),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.5,
-                    child: DropdownButtonFormField(
-                      value: lotteyType,
-                      hint: Text("Choose Lottery Type"),
-                      /* validator: (value) {
-                      return value == null ? "empty" : null;
-                    },*/
-                      items: lotteryTypeList.map((e) {
-                            return DropdownMenuItem<String>(
-                              child: Text(e.toString()),
-                              value: e.toString(),
-                            );
-                          })?.toList() ??
-                          [],
-                      onChanged: (value) {
-                        setState(() {
-                          lotteryOrder.type = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          lotteryOrder.type = value;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Container(
-                      width: MediaQuery.of(context).size.width / 4,
-                      child: Text("Lottery Date")),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 1.5,
-                    child: TextFormField(
-                      controller: dateinput,
-                      onTap: () async {
-                        DateTime pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2025),
-                        );
-                        if (pickedDate != null) {
-                          String formattedDate =
-                              DateFormat('yyyy-MM-dd HH:mm:ss')
-                                  .format(pickedDate);
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: Text("Lottery Type")),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: DropdownButtonFormField(
+                        value: lotteyType,
+                        hint: Text("Choose Lottery Type"),
+                        /* validator: (value) {
+                        return value == null ? "empty" : null;
+                      },*/
+                        items: lotteryTypeList.map((e) {
+                              return DropdownMenuItem<String>(
+                                child: Text(e.toString()),
+                                value: e.toString(),
+                              );
+                            })?.toList() ??
+                            [],
+                        onChanged: (value) {
                           setState(() {
-                            dateinput.text =
-                                formattedDate; //set output date to TextField value.
+                            lotteryOrder.type = value;
                           });
-                        }
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          lotteyType = value;
-                        });
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          lotteryOrder.lot_day = dateinput.text;
-                        });
-                      },
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            lotteryOrder.type = value;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: Text("Lottery Date")),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: GestureDetector(
+                        onTap: () async {
+                          DateTime pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2025),
+                            initialEntryMode: DatePickerEntryMode.input,
+                          );
+                          if (pickedDate != null) {
+                            String isoDate =
+                                pickedDate.toUtc().toIso8601String();
+                            // String formattedDate =
+                            // DateFormat('yyyy-MM-dd HH:mm:ss')
+                            //   .format(pickedDate);
+                            setState(() {
+                              dateinput.text = isoDate;
+                              // formattedDate; //set output date to TextField value.
+                            });
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: dateinput,
+                            /*onTap: () async {
+                              DateTime pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2020),
+                                lastDate: DateTime(2025),
+                                initialEntryMode: DatePickerEntryMode.input,
+                              );
+                              if (pickedDate != null) {
+                                String isoDate = pickedDate.toUtc().toIso8601String();
+                                // String formattedDate =
+                                // DateFormat('yyyy-MM-dd HH:mm:ss')
+                                //   .format(pickedDate);
+                                setState(() {
+                                  dateinput.text = isoDate;
+                                  // formattedDate; //set output date to TextField value.
+                                });
+                              }
+                            },*/
+                            onChanged: (value) {
+                              setState(() {
+                                lotteyType = value;
+                              });
+                            },
+                            onSaved: (value) {
+                              setState(() {
+                                lotteryOrder.lot_day = dateinput.text;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Divider(),
-              Row(children: <Widget>[
-                Container(
-                    width: MediaQuery.of(context).size.width / 4,
-                    child: Text("Prize")),
-                Container(
-                    width: MediaQuery.of(context).size.width / 1.5,
-                    child: TextFormField(
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12.0))),
-                          labelText: 'Lottery Prize',
-                          hintText: ""),
-                      onSaved: (value) {
-                        setState(() {
-                          lotteryOrder.prize = int.tryParse(value);
-                        });
-                      },
-                      validator: (value) {
-                        return null;
-                      },
-                      maxLength: 4,
-                    )),
-              ]),
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Row(children: <Widget>[
+                  Container(
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: Text("Prize")),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: TextFormField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0))),
+                            labelText: 'Lottery Prize',
+                            hintText: ""),
+                        onSaved: (value) {
+                          setState(() {
+                            lotteryOrder.prize = int.tryParse(value);
+                          });
+                        },
+                        validator: (value) {
+                          return null;
+                        },
+                        maxLength: 4,
+                      )),
+                ]),
+              ),
               Divider(),
               Container(
                 width: 300,
