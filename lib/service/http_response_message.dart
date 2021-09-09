@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'form_bloc.dart';
 
-class Helper {
-  static Widget errorMessage(FormBloc bloc) {
+class HttpResponseMessage {
+  static Widget AddHttpResponse(FormBloc bloc) {
     return StreamBuilder(
-        stream: bloc.errorMessage,
+        stream: bloc.httpResponseMessage,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text(

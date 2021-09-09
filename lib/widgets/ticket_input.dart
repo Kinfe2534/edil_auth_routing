@@ -58,23 +58,6 @@ class _TicketInputState extends State<TicketInput> {
   TicketOrder ticketOrder;
   List<String> allDigits = ['a', 'b', 'c', 'd', 'e'];
 
-  /*void _submitOrder(FormBloc formBloc) {
-    if (_formStateKey.currentState.validate()) {
-      _formStateKey.currentState.save();
-      ticketAllDigits = ticketFirstDigit +
-          ticketSecondDigit +
-          ticketThirdDigit +
-          ticketFourthDigit +
-          ticketFifthDigit;
-      ticketOrder = new TicketOrder(
-          user_id: formBloc.userData.id,
-          cost: widget.cost,
-          loto_numbers: ticketAllDigits,
-          lottery_id: widget.lottery.id);
-      formBloc.ticketsTobuy.add(ticketOrder);
-      formBloc.addTicketOrder("update");
-    }
-  }*/
   void _submitOrder(FormBloc formBloc) {
     if (_formStateKey.currentState.validate()) {
       _formStateKey.currentState.save();

@@ -6,7 +6,7 @@ class Draw extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Gratitude'),
+        title: Text('Draw'),
       ),
       body: Center(
         child: Icon(

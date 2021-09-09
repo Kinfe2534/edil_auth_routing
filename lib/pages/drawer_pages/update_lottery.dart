@@ -6,7 +6,7 @@ class UpdateLottery extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reminders'),
+        title: Text('Update Lottery'),
       ),
       body: Center(
         child: Icon(

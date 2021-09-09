@@ -23,18 +23,9 @@ class FormBloc with ValidationMixin {
   final _password = new BehaviorSubject<String>();
   final _name = new BehaviorSubject<String>();
   final _cellphone = new BehaviorSubject<String>();
-  final _errorMessage = new BehaviorSubject<String>();
   final _ticketOrder = new BehaviorSubject<String>();
   final _digitField = new BehaviorSubject<String>();
-
-  Function(String) get changeUsername => _username.sink.add;
-  Function(String) get changeEmail => _email.sink.add;
-  Function(String) get changePassword => _password.sink.add;
-  Function(String) get changeName => _name.sink.add;
-  Function(String) get changeCellphone => _cellphone.sink.add;
-  Function(String) get addError => _errorMessage.sink.add;
-  Function(String) get addTicketOrder => _ticketOrder.sink.add;
-  Function(String) get addDigitField => _digitField.sink.add;
+  final _httpResponseMessage = new BehaviorSubject<String>();
 
   Stream<String> get username => _username.stream.transform(validatorUsername);
   Stream<String> get email => _email.stream.transform(validatorEmail);
@@ -42,9 +33,9 @@ class FormBloc with ValidationMixin {
   Stream<String> get name => _name.stream.transform(validatorFullname);
   Stream<String> get cellphone =>
       _cellphone.stream.transform(validatorPhonenumber);
-  Stream<String> get errorMessage => _errorMessage.stream;
   Stream<String> get ticketOrder => _ticketOrder.stream;
   Stream<String> get digitField => _digitField.stream;
+  Stream<String> get httpResponseMessage => _httpResponseMessage.stream;
 
   Stream<SignupData> get submitValidSignup =>
       Rx.combineLatest5(username, email, password, name, cellphone,
@@ -62,67 +53,50 @@ class FormBloc with ValidationMixin {
         return LoginData(username: _username.value, password: _password.value);
       });
 
-  /*
-  dynamic register(BuildContext context, SignupData signupData) async {
-    final res = await authInfo.register(registerData, signupUrl);
-    final data = jsonDecode(res.body) as Map<String, dynamic>;
+  Function(String) get changeUsername => _username.sink.add;
+  Function(String) get changeEmail => _email.sink.add;
+  Function(String) get changePassword => _password.sink.add;
+  Function(String) get changeName => _name.sink.add;
+  Function(String) get changeCellphone => _cellphone.sink.add;
+  Function(String) get addTicketOrder => _ticketOrder.sink.add;
+  Function(String) get addDigitField => _digitField.sink.add;
+  Function(String) get addHttpResponseMessage => _httpResponseMessage.sink.add;
+/*
+  
+      final _signupMessage = new BehaviorSubject<String>();
+  final _loginMessage = new BehaviorSubject<String>();
+  final _getAllLotteriesMessage = new BehaviorSubject<String>();
+  final _getAllTicketsMessage = new BehaviorSubject<String>();
+  final _createTicketMessage = new BehaviorSubject<String>();
+  final _createLotteryMessage = new BehaviorSubject<String>();
+  final _updateLotteryMessage = new BehaviorSubject<String>();
+  final _getAllWinnersMessage = new BehaviorSubject<String>();
+  final _drawMessage = new BehaviorSubject<String>();
 
-    if (res.statusCode == 200) {
-      print('Register statusCode equal to 200');
-      addError(data['message']);
+  Function(String) get addSignupMessage => _signupMessage.sink.add;
+  Function(String) get addLoginMessage => _loginMessage.sink.add;
+  Function(String) get addGetAllLotteriesMessage =>
+      _getAllLotteriesMessage.sink.add;
+  Function(String) get addGetAllTicketsMessage =>
+      _getAllTicketsMessage.sink.add;
+  Function(String) get addcreateTicketMessage => _createTicketMessage.sink.add;
+  Function(String) get addcreateLotteryMessage =>
+      _createLotteryMessage.sink.add;
+  Function(String) get addUpdateLotteryMessage =>
+      _updateLotteryMessage.sink.add;
+  Function(String) get addGetAllWinnersMessage =>
+      _getAllWinnersMessage.sink.add;
+  Function(String) get addDrawMessage => _drawMessage.sink.add;
 
-      print(data.toString());
-      HttpService.setToken(data['token'], data['refreshtoken']);
-      Navigator.pop(context);
-      //Navigator.pushNamed(context, '/home');
-      return data;
-    } else {
-      print('Register statusCode not equal to 200');
-      addError(data['message']);
-    }
-    print(res.statusCode);
-  }
-
-  //login
-  dynamic login(BuildContext context) async {
-    authInfo = HttpService();
-    loginData = LoginData(username: _username.value, password: _password.value);
-    final res = await authInfo.login(loginData, loginUrl);
-    final data = jsonDecode(res.body) as Map<String, dynamic>;
-    if (res.statusCode == 200) {
-      //Map<String, dynamic> data = jsonDecode(res.body);
-      print('Login statusCode equal to 200');
-      addError(data['message']);
-      userData = UserData.fromJson(data);
-      HttpService.setToken(data['token'], data['refreshtoken']);
-      Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
-      return data;
-    } else {
-      print('Login statusCode not equal to 200');
-      addError(data['message']);
-    }
-    print(res.statusCode);
-  }
-
-  //creat Tciket
-  dynamic createTciket(BuildContext context) async {
-    loginData = LoginData(username: _username.value, password: _password.value);
-    final res = await authInfo.login(loginData, loginUrl);
-    final data = jsonDecode(res.body) as Map<String, dynamic>;
-    if (res.statusCode == 200) {
-      //Map<String, dynamic> data = jsonDecode(res.body);
-      print('Login statusCode equal to 200');
-      addError(data['message']);
-      userData = UserData.fromJson(data);
-      HttpService.setToken(data['token'], data['refreshtoken']);
-      Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
-      return data;
-    } else {
-      print('Login statusCode not equal to 200');
-      addError(data['message']);
-    }
-    print(res.statusCode);
-  }
+  Stream<String> get signupMessage => _signupMessage.stream;
+  Stream<String> get loginMessage => _loginMessage.stream;
+  Stream<String> get getAllLotteriesMessage => _getAllLotteriesMessage.stream;
+  Stream<String> get getAllTicketsMessage => _getAllTicketsMessage.stream;
+  Stream<String> get createTicketMessage => _createTicketMessage.stream;
+  Stream<String> get createLotteryMessage => _createLotteryMessage.stream;
+  Stream<String> get updateLotteryMessage => _updateLotteryMessage.stream;
+  Stream<String> get getAllWinnersMessage => _getAllWinnersMessage.stream;
+  Stream<String> get drawMessage => _drawMessage.stream;
 */
   dispose() {
     _username.close();
@@ -130,8 +104,18 @@ class FormBloc with ValidationMixin {
     _password.close();
     _name.close();
     _cellphone.close();
-    _errorMessage.close();
     _ticketOrder.close();
     _digitField.close();
+    _httpResponseMessage.close();
+    /*
+    _signupMessage.close();
+    _loginMessage.close();
+    _createLotteryMessage.close();
+    _createTicketMessage.close();
+    _drawMessage.close();
+    _getAllLotteriesMessage.close();
+    _getAllTicketsMessage.close();
+    _updateLotteryMessage.close();
+    _getAllWinnersMessage.close();*/
   }
 }

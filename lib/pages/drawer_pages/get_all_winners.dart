@@ -6,7 +6,7 @@ class GetAllWinners extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Birthdays'),
+        title: Text('Get All Winners'),
       ),
       body: Center(
         child: Icon(

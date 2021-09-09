@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
-import 'package:edil/service/helper.dart';
+import 'package:edil/service/http_response_message.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -38,7 +38,7 @@ class _SignupState extends State<Signup> {
                 Container(
                   width: 300,
                   height: 35,
-                  child: Helper.errorMessage(formBloc),
+                  child: HttpResponseMessage.AddHttpResponse(formBloc),
                 ),
                 _button(formBloc),
               ],
@@ -133,11 +133,11 @@ class _SignupState extends State<Signup> {
       try {
         if (res.statusCode == 200) {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
-          formBloc.addError(data["message"]);
+          formBloc.addHttpResponseMessage(data["message"]);
           Navigator.pop(context);
         } else {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
-          formBloc.addError(data["message"]);
+          formBloc.addHttpResponseMessage(data["message"]);
           print(data['message']);
           throw Exception(data);
         }

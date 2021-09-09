@@ -1,10 +1,11 @@
 import 'package:edil/pages/auth_pages/login_screen.dart';
+import 'package:edil/pages/drawer_pages/create_ottery.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:edil/pages/drawer_pages/getAllWinners.dart';
+import 'package:edil/pages/drawer_pages/get_all_winners.dart';
 import 'package:edil/pages/drawer_pages/draw.dart';
-import 'package:edil/pages/drawer_pages/updateLottery.dart';
+import 'package:edil/pages/drawer_pages/update_lottery.dart';
 
 class MenuListTileLoggedOutWidget extends StatefulWidget {
   const MenuListTileLoggedOutWidget({Key key}) : super(key: key);
@@ -20,6 +21,19 @@ class _MenuListTileLoggedOutWidgetState
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.cake),
+          title: Text('Create Lottery'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateLottery(),
+              ),
+            );
+          },
+        ),
         ListTile(
           leading: Icon(Icons.cake),
           title: Text('Get All Winners'),
@@ -101,6 +115,19 @@ class _MenuListTileLoggedInWidgetState
     final FormBloc formBloc = Provider.of(context);
     return Column(
       children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.cake),
+          title: Text('Create Lottery'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateLottery(),
+              ),
+            );
+          },
+        ),
         ListTile(
           leading: Icon(Icons.cake),
           title: Text('Get All Winners'),

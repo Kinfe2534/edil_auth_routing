@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:edil/model/auth_model.dart';
 import 'package:edil/service/form_bloc.dart';
-import 'package:edil/service/helper.dart';
+import 'package:edil/service/http_response_message.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
                 Container(
                   width: 300,
                   height: 35,
-                  child: Helper.errorMessage(formBloc),
+                  child: HttpResponseMessage.AddHttpResponse(formBloc),
                 ),
                 Row(
                   children: [
@@ -113,11 +113,11 @@ class _LoginState extends State<Login> {
         if (res.statusCode == 200) {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
           formBloc.userData = UserData.fromJson(data);
-          formBloc.addError(data['message']);
+          formBloc.addHttpResponseMessage(data['message']);
           Navigator.pushNamed(context, '/lotteriesPageLoggedIn');
         } else if (res.statusCode == 401) {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
-          formBloc.addError(data['message']);
+          formBloc.addHttpResponseMessage(data['message']);
         } else {
           throw Exception("Failed to login");
         }

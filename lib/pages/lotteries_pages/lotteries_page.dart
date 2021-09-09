@@ -41,24 +41,24 @@ class _LotteriesPageLoggedOutState extends State<LotteriesPageLoggedOut> {
           if (snapShot.hasData) {
             List<Lottery> lotteries = snapShot.data;
 
-            return ListView(
-              children: lotteries
-                  .map((Lottery lottery) => Column(children: <Widget>[
-                        ListTile(
-                            leading: Text(lottery.id.toString()),
-                            title: Text(lottery.type.toString()),
-                            trailing: Icon(Icons.arrow_forward_sharp),
-                            subtitle: Text(lottery.id.toString()),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      // LotteryDetail(lottery: lottery))),
-                                      BuyLottery(lottery: lottery)));
-                            }),
-                        Divider(color: Colors.grey),
-                      ]))
-                  .toList(),
-            );
+            return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: lotteries.length,
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                      leading: Text(lotteries[index].id.toString()),
+                      title: Text(lotteries[index].type.toString()),
+                      trailing: Icon(Icons.arrow_forward_sharp),
+                      subtitle: Text(lotteries[index].id.toString()),
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                // LotteryDetail(lottery: lottery))),
+                                BuyLottery(lottery: lotteries[index])));
+                      });
+                });
           } else if (snapShot.hasError) {
             return Center(child: Text('Has Error'));
           }
@@ -98,13 +98,13 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
       body: ListView(
         children: <Widget>[
           Divider(),
-          Text("Available Lotteries"),
+          Center(child: Text("Available Lotteries")),
           Divider(),
           Container(
               height: MediaQuery.of(context).size.height / 1,
               child: LotteryList(allLotteries: allLotteries)),
           Divider(),
-          Text("Your Tickets"),
+          Center(child: Text("Your Tickets")),
           Divider(),
           Container(
               height: MediaQuery.of(context).size.height / .8,
@@ -203,37 +203,30 @@ class _TicketListState extends State<TicketList> {
           if (snapShot.hasData) {
             List<Ticket> tickets = snapShot.data;
 
-            return ListView(
-              children: tickets
-                  .map((Ticket ticket) => Column(children: <Widget>[
-                        ListTile(
-                            leading: Text(ticket.id.toString()),
-                            title: Text(ticket.loto_number.toString()),
-                            trailing: Icon(Icons.arrow_forward_sharp),
-                            subtitle: Text("Cost: ${ticket.cost.toString()}"),
-                            // onTap: () =>
-                            //  Navigator.of(context).push(MaterialPageRoute(
-                            //  builder: (context) =>
-                            // LotteryDetail(lottery: lottery))),
-                            //    TicketDetail(ticket: ticket))),
-                            onTap: () async {
-                              final result = await Navigator.push<bool>(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          // LotteryDetail(lottery: lottery))),
-                                          TicketDetail(ticket: ticket)));
-                              if (result == true) {
-                                setState(() {
-                                  updateStatus = true;
-                                });
-                              }
-                              print("update ticket: $result");
-                            }),
-                        Divider(color: Colors.grey),
-                      ]))
-                  .toList(),
-            );
+            return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: tickets.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                      leading: Text(tickets[index].id.toString()),
+                      title: Text(tickets[index].loto_number.toString()),
+                      trailing: Icon(Icons.arrow_forward_sharp),
+                      subtitle: Text("Cost: ${tickets[index].cost.toString()}"),
+                      onTap: () async {
+                        final result = await Navigator.push<bool>(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    // LotteryDetail(lottery: lottery))),
+                                    TicketDetail(ticket: tickets[index])));
+                        if (result == true) {
+                          setState(() {
+                            updateStatus = true;
+                          });
+                        }
+                        print("update ticket: $result");
+                      });
+                });
           } else if (snapShot.hasError) {
             return Center(child: Text('Has Error'));
           }

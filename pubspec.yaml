@@ -27,6 +27,7 @@ dependencies:
   http:
   rxdart:
   flutter_session:
+  intl:
 
 
   # The following adds the Cupertino Icons font to your application.
