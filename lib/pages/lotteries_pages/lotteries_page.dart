@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:edil/pages/drawer_pages/update_lottery.dart';
 import 'package:edil/pages/lotteries_pages/buy_lottery.dart';
 import 'package:edil/pages/lotteries_pages/ticket_detail.dart';
 import 'package:edil/service/form_bloc.dart';
+import 'package:edil/service/http_response_message.dart';
 import 'package:edil/service/http_service.dart';
 import 'package:edil/service/provider.dart';
 import 'package:edil/widgets/left_drawer.dart';
 import 'package:edil/widgets/right_drawer.dart';
+import 'package:edil/widgets/update_lottery_page.dart';
+import 'package:edil/widgets/winners_page.dart';
 import 'package:flutter/material.dart';
 import 'package:edil/model/lottery_model.dart';
+import 'package:http/http.dart' as http;
 
 class LotteriesPageLoggedOut extends StatefulWidget {
   const LotteriesPageLoggedOut({Key key}) : super(key: key);
@@ -89,6 +95,7 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
 
   @override
   Widget build(BuildContext context) {
+    FormBloc formBloc = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('All Lotteries'),
@@ -99,6 +106,14 @@ class _LotteriesPageLoggedInState extends State<LotteriesPageLoggedIn> {
         children: <Widget>[
           Divider(),
           Center(child: Text("Available Lotteries")),
+          Divider(),
+          Center(
+            child: Container(
+              width: 300,
+              height: 35,
+              child: HttpResponseMessage.AddHttpResponse(formBloc),
+            ),
+          ),
           Divider(),
           Container(
               height: MediaQuery.of(context).size.height / 1,
@@ -129,8 +144,35 @@ class LotteryList extends StatefulWidget {
 
 class _LotteryListState extends State<LotteryList> {
   bool updateStatus = false;
+  void _draw(Lottery lottery, FormBloc formBloc) async {
+    http.Response res = await formBloc.httpService.draw(lottery.id);
+    try {
+      if (res.statusCode == 200) {
+        final data = jsonDecode(res.body) as Map<String, dynamic>;
+        formBloc.addHttpResponseMessage(
+            "Lottery Id=   ${lottery.id} ${data["message"]}");
+        //  Navigator.pop(context);
+      }
+      if (res.statusCode == 400) {
+        final data = jsonDecode(res.body) as Map<String, dynamic>;
+        formBloc.addHttpResponseMessage(
+            "Lottery Id=   ${lottery.id} ${data["message"]}");
+        //  Navigator.pop(context);
+      } else {
+        final data = jsonDecode(res.body) as Map<String, dynamic>;
+        formBloc.addHttpResponseMessage(
+            "Lottery Id=   ${lottery.id}  ${data["message"]}");
+        print(data['message']);
+        throw Exception(data);
+      }
+    } catch (e) {
+      print("Exception happened in Draw");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    FormBloc formBloc = Provider.of(context);
     return Expanded(
       child: FutureBuilder<List<Lottery>>(
         future: widget.allLotteries,
@@ -140,34 +182,108 @@ class _LotteryListState extends State<LotteryList> {
 
             return ListView(
               children: lotteries
-                  .map((Lottery lottery) => Column(children: <Widget>[
-                        ListTile(
-                          leading: Text(lottery.id.toString()),
-                          title: Text(lottery.type),
-                          trailing: Icon(Icons.arrow_forward_sharp),
-                          subtitle: Text(lottery.id.toString()),
-                          // onTap: () async{
-                          // final result= await   Navigator.of(context).push(MaterialPageRoute(
-                          //  builder: (context) =>
-                          // LotteryDetail(lottery: lottery))),
-                          //  BuyLottery(lottery: lottery)));},
-                          onTap: () async {
-                            final result = await Navigator.push<bool>(
-                                context,
-                                MaterialPageRoute(
+                  .map(
+                    (Lottery lottery) => Column(children: <Widget>[
+                      ListTile(
+                        leading: Text(lottery.id.toString()),
+                        title: Text(lottery.type),
+                        trailing: Icon(Icons.arrow_forward_sharp),
+                        subtitle: Text(lottery.id.toString()),
+                        // onTap: () async{
+                        // final result= await   Navigator.of(context).push(MaterialPageRoute(
+                        //  builder: (context) =>
+                        // LotteryDetail(lottery: lottery))),
+                        //  BuyLottery(lottery: lottery)));},
+                        onTap: () async {
+                          final result = await Navigator.push<bool>(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      // LotteryDetail(lottery: lottery))),
+                                      BuyLottery(lottery: lottery)));
+                          if (result == true) {
+                            setState(() {
+                              updateStatus = true;
+                            });
+                          }
+                          print("update lottery : $result");
+                        },
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () => _draw(lottery, formBloc),
+                              child: Container(
+                                  //  width: MediaQuery.of(context).size.width / 2,
+                                  child: Text(
+                                    'Draw',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                  alignment: Alignment.bottomRight,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.blueAccent)),
+                              // ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) =>
                                         // LotteryDetail(lottery: lottery))),
-                                        BuyLottery(lottery: lottery)));
-                            if (result == true) {
-                              setState(() {
-                                updateStatus = true;
-                              });
-                            }
-                            print("update lottery : $result");
-                          },
-                        ),
-                        Divider(color: Colors.grey),
-                      ]))
+                                        WinnersPage(lottery: lottery)));
+                              },
+                              child: Container(
+                                  //  width: MediaQuery.of(context).size.width / 2,
+                                  child: Text(
+                                    'Get Winners',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                  alignment: Alignment.bottomRight,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.yellowAccent)),
+                              // ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        // LotteryDetail(lottery: lottery))),
+                                        UpdateLottery(lottery: lottery)));
+                              },
+                              child: Container(
+                                  child: Text(
+                                    'Update',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                  alignment: Alignment.bottomLeft,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: Colors.redAccent)),
+                            ),
+                          ]),
+                      Divider(color: Colors.grey),
+                    ]),
+                  )
                   .toList(),
             );
           } else if (snapShot.hasError) {

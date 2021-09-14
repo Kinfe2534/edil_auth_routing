@@ -70,36 +70,38 @@ class HttpService {
     return res;
   }
 
-  Future<http.Response> createLottery(LotteryOrder lotteryOrder) async {
+  Future<http.Response> createLottery(CreateLotteryModel createLottery) async {
     final Uri createLotteryUrl =
         Uri.parse("http://localhost:8080/api/lottery/create");
-    var body = jsonEncode(lotteryOrder.toJson());
+    var body = jsonEncode(createLottery.toJson());
 
     http.Response res = await http.post(createLotteryUrl,
         headers: {"Content-Type": "application/json"}, body: body);
     return res;
   }
 
-  Future<http.Response> getWinners() async {
+  Future<http.Response> getWinners(int id) async {
     final Uri getWinnersUrl =
-        Uri.parse("http://localhost:8080/api/lottery/getwinners?id=2");
+        Uri.parse("http://localhost:8080/api/lottery/getwinners?id=$id");
     http.Response res = await http.get(getWinnersUrl);
 
     return res;
   }
 
-  Future<http.Response> draw() async {
+  Future<http.Response> draw(int id) async {
     final Uri drawUrl =
-        Uri.parse("http://localhost:8080/api/lottery/draw?id=4");
+        Uri.parse("http://localhost:8080/api/lottery/draw?id=$id");
     http.Response res = await http.get(drawUrl);
 
     return res;
   }
 
-  Future<http.Response> updateLottery() async {
+  Future<http.Response> updateLottery(UpdateLotteryModel updateLottery) async {
     final Uri updateLotteryUrl =
         Uri.parse("http://localhost:8080/api/lottery/update");
-    http.Response res = await http.put(updateLotteryUrl);
+    var body = jsonEncode(updateLottery.toJson());
+    http.Response res = await http.put(updateLotteryUrl,
+        headers: {"Content-Type": "application/json"}, body: body);
 
     return res;
   }

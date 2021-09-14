@@ -10,38 +10,41 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-class CreateLottery extends StatefulWidget {
-  const CreateLottery({Key key}) : super(key: key);
+class UpdateLottery extends StatefulWidget {
+  final Lottery lottery;
+  const UpdateLottery({Key key, this.lottery}) : super(key: key);
 
   @override
-  _CreateLotteryState createState() => _CreateLotteryState();
+  _UpdateLotteryState createState() => _UpdateLotteryState();
 }
 
-class _CreateLotteryState extends State<CreateLottery> {
+class _UpdateLotteryState extends State<UpdateLottery> {
   TextEditingController dateinput = TextEditingController();
-  GlobalKey<FormState> _createLotteryFormStateKey = GlobalKey<FormState>();
-  LotteryOrder lotteryOrder = new LotteryOrder();
+  GlobalKey<FormState> _updateLotteryFormStateKey = GlobalKey<FormState>();
+  UpdateLotteryModel updateLottery = new UpdateLotteryModel();
   String lotteyType;
-  void _submitCreateLottery(FormBloc formBloc) async {
-    if (_createLotteryFormStateKey.currentState.validate()) {
-      _createLotteryFormStateKey.currentState.save();
+  void _submitUpdateLottery(FormBloc formBloc) async {
+    if (_updateLotteryFormStateKey.currentState.validate()) {
+      _updateLotteryFormStateKey.currentState.save();
+      updateLottery.id = widget.lottery.id;
 
       http.Response res =
-          await formBloc.httpService.createLottery(lotteryOrder);
+          await formBloc.httpService.updateLottery(updateLottery);
       try {
         if (res.statusCode == 200) {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
-          formBloc.addHttpResponseMessage(data["message"]);
+          formBloc.addHttpResponseMessage(data["lotDay"]);
           Navigator.pop(context);
         } else {
           final data = jsonDecode(res.body) as Map<String, dynamic>;
           formBloc.addHttpResponseMessage(data["message"]);
           print(res.statusCode);
           print(data['message']);
-          throw Exception("Esception in create lottery");
+          //  throw Exception("Esception in Update lottery");
         }
       } catch (e) {
-        print("Exception happened in Create Lottey");
+        print(e.toString());
+        print("Exception happened in Update Lottey");
       }
     }
   }
@@ -58,11 +61,17 @@ class _CreateLotteryState extends State<CreateLottery> {
     FormBloc formBloc = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Lottery'),
+        title: Text('Update Lottery'),
       ),
-      body: SafeArea(
-        child: Form(
-          key: _createLotteryFormStateKey,
+      body: Column(children: <Widget>[
+        ListTile(
+          leading: Text(widget.lottery.id.toString()),
+          title: Text(widget.lottery.type),
+          trailing: Icon(Icons.arrow_forward_sharp),
+          subtitle: Text(widget.lottery.prize.toString()),
+        ),
+        Form(
+          key: _updateLotteryFormStateKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -90,12 +99,12 @@ class _CreateLotteryState extends State<CreateLottery> {
                             [],
                         onChanged: (value) {
                           setState(() {
-                            lotteryOrder.type = value;
+                            updateLottery.type = value;
                           });
                         },
                         onSaved: (value) {
                           setState(() {
-                            lotteryOrder.type = value;
+                            updateLottery.type = value;
                           });
                         },
                       ),
@@ -162,7 +171,7 @@ class _CreateLotteryState extends State<CreateLottery> {
                             },
                             onSaved: (value) {
                               setState(() {
-                                lotteryOrder.lot_day = dateinput.text;
+                                updateLottery.lot_day = dateinput.text;
                               });
                             },
                           ),
@@ -194,7 +203,7 @@ class _CreateLotteryState extends State<CreateLottery> {
                             hintText: ""),
                         onSaved: (value) {
                           setState(() {
-                            lotteryOrder.prize = int.tryParse(value);
+                            updateLottery.prize = int.tryParse(value);
                           });
                         },
                         validator: (value) {
@@ -213,7 +222,7 @@ class _CreateLotteryState extends State<CreateLottery> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: TextButton(
-                  child: Text('Create Lottery'),
+                  child: Text('Update Lottery'),
                   style: TextButton.styleFrom(
                     primary: Colors.green,
                     backgroundColor: Colors.lightGreen.shade100,
@@ -225,13 +234,13 @@ class _CreateLotteryState extends State<CreateLottery> {
                         fontSize: 20,
                         fontStyle: FontStyle.italic),
                   ),
-                  onPressed: () => _submitCreateLottery(formBloc),
+                  onPressed: () => _submitUpdateLottery(formBloc),
                 ),
               ),
             ],
           ),
         ),
-      ),
+      ]),
     );
   }
 }

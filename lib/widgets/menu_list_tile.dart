@@ -1,5 +1,5 @@
 import 'package:edil/pages/auth_pages/login_screen.dart';
-import 'package:edil/pages/drawer_pages/create_ottery.dart';
+import 'package:edil/pages/drawer_pages/create_lottery.dart';
 import 'package:edil/service/form_bloc.dart';
 import 'package:edil/service/provider.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,7 @@ class _MenuListTileLoggedOutWidgetState
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UpdateLottery(),
+                builder: (context) => UpdateLotteryDrawer(),
               ),
             );
           },
@@ -162,7 +162,7 @@ class _MenuListTileLoggedInWidgetState
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => UpdateLottery(),
+                builder: (context) => UpdateLotteryDrawer(),
               ),
             );
           },

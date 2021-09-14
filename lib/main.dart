@@ -1,4 +1,5 @@
 import 'package:edil/pages/lotteries_pages/lotteries_page.dart';
+import 'package:edil/widgets/update_lottery_page.dart';
 import 'package:flutter/material.dart';
 import 'pages/auth_pages/forgot_password_screen.dart';
 

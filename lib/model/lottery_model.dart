@@ -139,13 +139,30 @@ class TicketOrder {
   }
 }
 
-class LotteryOrder {
+class CreateLotteryModel {
   String type;
   String lot_day;
   int prize;
-  LotteryOrder({this.type, this.lot_day, this.prize});
+  CreateLotteryModel({this.type, this.lot_day, this.prize});
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data["type"] = type;
+    data["lot_day"] = lot_day;
+    data["prize"] = prize;
+
+    return data;
+  }
+}
+
+class UpdateLotteryModel {
+  int id;
+  String type;
+  String lot_day;
+  int prize;
+  UpdateLotteryModel({this.id, this.type, this.lot_day, this.prize});
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data["id"] = id;
     data["type"] = type;
     data["lot_day"] = lot_day;
     data["prize"] = prize;
@@ -212,6 +229,54 @@ class Winner {
       firstWinner: jsonMap['firstWinner'] as bool,
       secondWinner: jsonMap['secondWinner'] as bool,
       thirdWinner: jsonMap['thirdWinner'] as bool,
+    );
+  }
+}
+
+class UpdatedLottery {
+  final String createdAt;
+  final String updatedAt;
+  final String createdBy;
+  final String lastModifiedBy;
+  final int id;
+  final String lottery_code;
+  final String type;
+  final String lotDay;
+  final double prize;
+  final bool minPlayerLimitNotMet;
+  final String jobKey;
+  final bool drawn;
+  final bool scheduled;
+
+  UpdatedLottery(
+      {this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.lastModifiedBy,
+      this.id,
+      this.lottery_code,
+      this.type,
+      this.lotDay,
+      this.prize,
+      this.minPlayerLimitNotMet,
+      this.jobKey,
+      this.drawn,
+      this.scheduled});
+  factory UpdatedLottery.fromJson(Map<String, dynamic> jsonMap) {
+    return UpdatedLottery(
+      createdAt: jsonMap["createdAt"] as String,
+      updatedAt: jsonMap['updatedAt'] as String,
+      createdBy: jsonMap['createdBy'] as String,
+      lastModifiedBy: jsonMap['lastModifiedBy'] as String,
+      id: jsonMap['id'] as int,
+      lottery_code: jsonMap['lottery_code'] as String,
+      type: jsonMap['type'] as String,
+      lotDay: jsonMap['lot_day'] as String,
+      prize: jsonMap['prize'] as double,
+      minPlayerLimitNotMet: jsonMap['mminPlayerLimitNotMet'] as bool,
+      jobKey: jsonMap['jobKey'] as String,
+      drawn: jsonMap['drawn'] as bool,
+      scheduled: jsonMap['scheduled'] as bool,
     );
   }
 }
