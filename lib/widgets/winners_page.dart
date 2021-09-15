@@ -83,15 +83,22 @@ class _WinnersPageState extends State<WinnersPage> {
       appBar: AppBar(
         title: Text("All Winners"),
       ),
-      body: FutureBuilder<http.Response>(
-        future: allWinners,
-        builder: (context, snapShot) {
-          if (snapShot.hasData) {
-            return _displayWinners(widget.lottery, snapShot.data, formBloc);
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
+      body: Column(children: <Widget>[
+        FutureBuilder<http.Response>(
+          future: allWinners,
+          builder: (context, snapShot) {
+            if (snapShot.hasData) {
+              return _displayWinners(widget.lottery, snapShot.data, formBloc);
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+        Container(
+          width: 300,
+          height: 150,
+          child: HttpResponseMessage.AddHttpResponse(formBloc),
+        ),
+      ]),
     );
   }
 }
