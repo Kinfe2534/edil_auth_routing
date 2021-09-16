@@ -46,8 +46,8 @@ class _DisplayTicketChoicesState extends State<DisplayTicketChoices> {
                               } else {
                                 final data = jsonDecode(res.body)
                                     as Map<String, dynamic>;
-                                formBloc
-                                    .addHttpResponseMessage(data["message"]);
+                                formBloc.addHttpResponseMessage(
+                                    "error creating lottery id ${ticketOrder.lottery_id}: loto number :${ticketOrder.loto_numbers}");
                                 print(res.statusCode);
                                 print(data['message']);
                                 throw Exception("Esception in create lottery");
@@ -59,11 +59,6 @@ class _DisplayTicketChoicesState extends State<DisplayTicketChoices> {
                         ),
                       ),
                       Divider(color: Colors.grey),
-                      Container(
-                        width: 300,
-                        height: 150,
-                        child: HttpResponseMessage.AddHttpResponse(formBloc),
-                      ),
                     ]))
                 .toList(),
           );

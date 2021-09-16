@@ -1,3 +1,6 @@
+import 'package:edil/service/form_bloc.dart';
+import 'package:edil/service/http_response_message.dart';
+import 'package:edil/service/provider.dart';
 import 'package:edil/widgets/display_ticket_choices.dart';
 import 'package:edil/widgets/ticket_input.dart';
 
@@ -17,6 +20,7 @@ class _BuyLotteryState extends State<BuyLottery> {
   final bool updateStatus = false;
   @override
   Widget build(BuildContext context) {
+    FormBloc formBloc = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.lottery.type),
@@ -41,8 +45,16 @@ class _BuyLotteryState extends State<BuyLottery> {
               lottery: widget.lottery,
             )),
         Container(
+          width: 300,
+          height: 100,
+          child: Padding(
+              padding: EdgeInsets.all(22),
+              child: HttpResponseMessage.AddHttpResponse(formBloc)),
+        ),
+        Container(
             height: MediaQuery.of(context).size.height,
             child: DisplayTicketChoices()),
+        Divider(color: Colors.grey),
       ]),
       //single chiled scrolll view
     ); //sca
